@@ -1,1 +1,106 @@
-Week 1 Setup 
+Week 1 Setup :
+
+- Relational database :
+
+Database -> Table -> Row (Columns) 
+
+- Mongodb:
+
+Database -> Collection -> Document (property or field)
+វាមានទំរង់ស្រដៀង JSON .  វាមិនប្រកាន់ទេ យើងប្រើ "" Or '' 
+
++ Person (collection) 
+
+Example1:
+
+{
+name : "Piseth",
+age : 34
+}
+
+ចឹងគេហៅវាថា 1 Document 
+
+Example2:
+
+{
+name : "Piseth"
+}
+
+Example3:
+
+{
+name : "Piseth",
+age : 34,
+gender : "female"
+}
+
+
+Example4: embaded field: or subdocument 
+
+{
+name : "Piseth",
+age : 34,
+address :{ village:'ABC" , commune:'DE'}
+}
+
+ទាំងអស់ខាងលើនឹងសុទ្ធតែជា  Document ទាំងអស់
+
+Example5: អាចអត់មានអីទាំងអស់
+
+{
+mother:"",
+father:""
+}
+
+ទាំងអស់ខាងលើនឹងយើងអាចដាក់ជាមួយគ្នាបានទាំងអស់ នៅក្នុង Collection ជា Person នឹង។
+
+ទាំងអស់ Ex1--Ex5 នឹងគេហៅវាថា BSON (Binary Json) 
+
+==> Mongodb it stort in binary 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
