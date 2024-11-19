@@ -1,0 +1,21 @@
+MongoDB : GE Command 
+
+1. Create DB 
+
+>> use studentDB
+
+2. Check DB 
+
+>> db.student.insertOne({name:"Vibol",age:34})
+
+3. Create DB 
+
+>>  db.carDB.insertOne({name:'RoseRoy',year:'2024'})
+
+4. Show DB
+
+>> carDB> db.carDB.find()
+
+
+
+

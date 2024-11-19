@@ -1,0 +1,334 @@
+Week 1 Install Mongodb :
+
+1. Download Mongodb server : 
+
+https://www.mongodb.com/try/download/community
+
+2. Download Mongodb shell : វាជា Portable version ==> យើង Download hery ប្រើបានតែម្តង់
+
+https://www.mongodb.com/try/download/shell
+
+
+3. Mongodb add cmb 
+
+>> enviroment in Window then add Path : 
+
+>> cmd -> mongosh 
+
+--> test:
+
+>> show dbs :
+
+admin             40.00 KiB
+articledb         72.00 KiB
+card_service_db   72.00 KiB
+config            72.00 KiB
+loan_service_db   72.00 KiB
+local            156.00 KiB
+
+----------------------------------------------------
+
+4. Create collection :
+
+>> use studentDB ចឹងបើហើយវាអត់ចេញទេ គេហៅថា Create by lazily (create on the fly)
+==> ទាល់តែមាន document or collection អីមួយទើបវាបង្កើត
+
+studentDB> db.student.insertOne({name:"Vibol",age:34})
+{
+  acknowledged: true,
+  insertedId: ObjectId('673b0eb22d6229a3588bf202')
+}
+
+==> ObjectId('673b0eb22d6229a3588bf202') its auto create for the ID 
+
+>> show dbs 
+
+admin             40.00 KiB
+articledb         72.00 KiB
+card_service_db   72.00 KiB
+config           108.00 KiB
+loan_service_db   72.00 KiB
+local            156.00 KiB
+studentDB         40.00 KiB
+
+*** ចង់មើល DB ***
+>> db.student.find()
+
+
+studentDB> db.student.find()
+[
+  { _id: ObjectId('673b0eb22d6229a3588bf202'), name: 'Vibol', age: 34 }
+]
+
+---------------------------
+
+Add more document to the collection :
+
+>> carDB> db.carDB.insertOne({name:'Lexus'})
+
+carDB> db.carDB.find()
+[
+  {
+    _id: ObjectId('673bf7dd581d2775548bf202'),
+    name: 'RoseRoy',
+    year: '2024'
+  },
+  { _id: ObjectId('673bf874581d2775548bf203'), name: 'Lexus' }
+]
+
+យើងឃើញថាវាកើត ម្តង់មួយសម្រាប់ _id: ObjectId('673bf7dd581d2775548bf202')​==> _id: ObjectId('673bf874581d2775548bf203')
+
+
+
+
+----------------------------- Insert Data to Collection : 
+Example we have JSON data then we want to add to our collection:
+
+
+flightData:
+
+{
+departureAirport:'Phnom Penh',
+arrivalAirport:'Sovannphumi',
+distance: 700,
+intercontinental: false,
+aircraft:'Bangkok Air
+} 
+
+
+>> db.flight.insertOne({ departureAirport:'Phnom Penh', arrivalAirport:'Sovannphumi', distance: 700, intercontinental: false, aircraft:'Bangkok Air'})
+
+
+>> db.flight.find()
+
+==> 
+
+carDB> db.flight.find()
+[
+  {
+    _id: ObjectId('673bff10581d2775548bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air'
+  }
+]
+
+----------------- Insert custom document 
+
+>>  db.flight.insertOne({departureAirport: 'kos kong',_id:'myid-1'})
+
+==> 
+
+carDB> db.flight.find()
+[
+  {
+    _id: ObjectId('673bff10581d2775548bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air'
+  },
+  { _id: 'myid-1', departureAirport: 'kos kong' }
+]
+
+-------------------- insert douplicate ID -- error 
+
+>> carDB> db.flight.insertOne({departureAirport: 'Siem Reap',_id:'myid-1'})
+MongoServerError: E11000 duplicate key error collection: carDB.flight index: _id_ dup key: { _id: "myid-1" }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

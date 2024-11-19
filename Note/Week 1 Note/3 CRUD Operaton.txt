@@ -1,0 +1,449 @@
+CRUD Operation : CREATE, READ or Retrieve, UPDATE and DELETE
+
+1. Create :
+
+insertOne(data, options)
+insertMany(data, options) 
+
+- options is optional មានក៏បានអត់ក៏បាន
+
+2. Read or Retrieve : return list or Array 
+
+find(filter, options)
+findOne(filter, options)
+
+3. Update 
+
+updateOne(filter, data, options) សម្រាប់ Update វាធ្វើការ Find សិនទើបវាធ្វើការ Update កើត
+updateMany(filter, data, options) 
+
+** Update គឺវាធ្វើការ update document or one field inside the document 
+
+replaceOne(filter, data, options) -- over write to all the data 
+
+4. Delete: 
+
+deleteOne(filter, options) វារកហើយបានវាធ្វើការ Deleted 
+deleteMany(filter, options)
+
+========================================
+
+Collection carDB : carDB and flight is the table or called documents ,
+
+Table name = Documents in Mongodb 
+
+================================================ Example in CRUD 
+
+1. Delete 
+
+>> carDB> db.flight.find()
+[
+  {
+    _id: ObjectId('673bff10581d2775548bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air'
+  },
+  { _id: 'myid-1', departureAirport: 'kos kong' },
+  { _id: 'myid-2', departureAirport: 'Siem Reap' }
+]
+
+>> carDB> db.flight.deleteOne({_id:'myid-1'})
+{ acknowledged: true, deletedCount: 1 }
+carDB> db.flight.find()
+[
+  {
+    _id: ObjectId('673bff10581d2775548bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air'
+  },
+  { _id: 'myid-2', departureAirport: 'Siem Reap' }
+]
+
+2. Find or Read 
+
+2.1 findOne 
+
+carDB> db.flight.findOne({_id:'myid-2'})
+{ _id: 'myid-2', departureAirport: 'Siem Reap' }
+
+
+** findOne it return List {} object and it get the first found 
+
+2.2 find
+
+>> carDB> db.flight.find({departureAirport: 'Phnom Penh'}) it return Array [<list>]
+
+==> carDB> db.flight.find({departureAirport: 'Phnom Penh'})
+[
+  {
+    _id: ObjectId('673bff10581d2775548bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air'
+  },
+  { _id: 'myid-3', departureAirport: 'Phnom Penh' }
+]
+
+3. Delete 
+
+Example : soft delete = mean we create remark to database 
+
+>> carDB> db.flight.find(
+... )
+[
+  {
+    _id: ObjectId('673bff10581d2775548bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air'
+  },
+  { _id: 'myid-2', departureAirport: 'Siem Reap' },
+  { _id: 'myid-3', departureAirport: 'Phnom Penh' }
+]
+carDB> db.flight.updateOne({_id:'myid-2'},{marker:'Deleted'})
+MongoInvalidArgumentError: Update document requires atomic operators
+
+Note : it is error message " MongoInvalidArgumentError: Update document requires atomic operators"
+
+Then we add syntax:
+
+ {$set: {---}} 
+
+==>
+
+carDB> db.flight.updateOne({_id:'myid-2'},{$set:{marker:'Deleted'}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+==> resulte :
+
+carDB> db.flight.find()
+[
+  {
+    _id: ObjectId('673bff10581d2775548bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air'
+  },
+  { _id: 'myid-2', departureAirport: 'Siem Reap', marker: 'Deleted' },
+  { _id: 'myid-3', departureAirport: 'Phnom Penh' }
+]
+
+--- update field 
+
+>> carDB> db.flight.updateOne({_id:'myid-2'},{$set:{departureAirport: 'SHV'}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+We update the field : departureAirport: 'SHV'
+
+==> 
+
+>> carDB> db.flight.find()
+[
+  {
+    _id: ObjectId('673bff10581d2775548bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air'
+  },
+  { _id: 'myid-2', departureAirport: 'SHV', marker: 'Deleted' },
+  { _id: 'myid-3', departureAirport: 'Phnom Penh' }
+]
+
+--- Update many : example : we want to add marker : "TO Do " to all the flight document : 
+
+in the filter we put the {} 
+
+>> carDB> db.flight.updateMany({},{$set:{marker:"TO DO"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
+carDB> db.flight.find()
+[
+  {
+    _id: ObjectId('673bff10581d2775548bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air',
+    marker: 'TO DO'
+  },
+  { _id: 'myid-2', departureAirport: 'SHV', marker: 'TO DO' },
+  { _id: 'myid-3', departureAirport: 'Phnom Penh', marker: 'TO DO' }
+]
+
+
+===============================================================================
+
+* Insert Many * 
+
+>> carDB> db.flight.insertMany([{departureAirport:'BKK',arrivalAirport:'Florida',distance: 5000, intercontinental: true, aircraft:'Bangkok Air'},{departureAirport:'PP',arrivalAirport:'LA',distance: 5050, intercontinental: true, aircraft:'Bangkok Air'}])
+{
+
+
+Ex: 
+We want to find flight that intercontinental : 
+
+>> carDB> db.flight.find({intercontinental: true})
+[
+  {
+    _id: ObjectId('673c117f17bfd371f88bf202'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'Florida',
+    distance: 5000,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  },
+  {
+    _id: ObjectId('673c117f17bfd371f88bf203'),
+    departureAirport: 'PP',
+    arrivalAirport: 'LA',
+    distance: 5050,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  }
+]
+
+
+It return Array of List that have two list of object. 
+
+
+EX2: រកជើងហោះហើរ ដែលឆ្ងាយជាង 5000 km 
+
+* use syntax : $gt = greater than (>)
+
+>> carDB> db.flight.find({distance:{$gt:5000}})
+[
+  {
+    _id: ObjectId('673c117f17bfd371f88bf203'),
+    departureAirport: 'PP',
+    arrivalAirport: 'LA',
+    distance: 5050,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  }
+]
+
+* use syntax : $gt = greater than equal (>=)
+
+>> carDB> db.flight.find({distance:{$gte:5000}})
+[
+  {
+    _id: ObjectId('673c117f17bfd371f88bf202'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'Florida',
+    distance: 5000,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  },
+  {
+    _id: ObjectId('673c117f17bfd371f88bf203'),
+    departureAirport: 'PP',
+    arrivalAirport: 'LA',
+    distance: 5050,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  }
+]
+
+===================================================
+
+EX3 ផ្គួបលក្ខខ័ណ្ឌ
+
+>> carDB> db.flight.find({intercontinental: true,arrivalAirport: 'LA'})
+[
+  {
+    _id: ObjectId('673c117f17bfd371f88bf203'),
+    departureAirport: 'PP',
+    arrivalAirport: 'LA',
+    distance: 5050,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  }
+]
+
+syntax: 
+
+db.flight.find({intercontinental: true,arrivalAirport: 'LA'})
+
+============================================================================
+
+4. Repace Method 
+
+>> carDB> db.flight.replaceOne({ _id: 'myid-2' }, { departureAirport: 'BKK', arrivalAirport: 'Florida', distance: 5000, intercontinental: true, aircraft: 'Bangkok Air' })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+==> 
+
+
+
+carDB> db.flight.find()
+[
+  {
+    _id: ObjectId('673bff10581d2775548bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+
+carDB> db.flight.find()
+[
+  {
+    _id: ObjectId('673bff10581d2775548bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air',
+    marker: 'TO DO'
+  },
+  {
+    _id: 'myid-2',
+    departureAirport: 'BKK',
+    arrivalAirport: 'Florida',
+    distance: 5000,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  },
+  { _id: 'myid-3', departureAirport: 'Phnom Penh', marker: 'TO DO' },
+  {
+    _id: ObjectId('673c117f17bfd371f88bf202'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'Florida',
+    distance: 5000,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  },
+  {
+    _id: ObjectId('673c117f17bfd371f88bf203'),
+    departureAirport: 'PP',
+    arrivalAirport: 'LA',
+    distance: 5050,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  }
+]
+
+
+===> It will replace all the document in the _id : 'myid-2' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
