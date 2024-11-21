@@ -1,5 +1,10 @@
 Week 1 Setup :
 
+https://www.mongodb.com/docs/drivers/java/sync/v4.3/fundamentals/crud/write-operations/insert/
+
+More detail using with JAVA
+
+
 - Relational database :
 
 Database -> Table -> Row (Columns) 
