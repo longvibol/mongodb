@@ -1,0 +1,294 @@
+CRUD Operation : CREATE, READ or Retrieve, UPDATE and DELETE
+
+
+* READ * 
+Deep Dive to find method: finding Data 
+
+Ex: 
+
+ {
+    departureAirport: 'BKK',
+    arrivalAirport: 'Florida',
+    distance: 2000,
+    intercontinental: true,
+    aircraft: 'Bangkok Air',
+  },
+
+*Insert One*
+
+>> db.flight.insertOne({ departureAirport: 'BKK', arrivalAirport: 'Florida', distance: 2000, intercontinental: true, aircraft: 'Bangkok Air' })
+
+==> 
+
+[
+  {
+    _id: ObjectId('67ede790e40e5841248bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air',
+    marker: 'TO DO'
+  },
+  { _id: 'myid-2', departureAirport: 'Kos Sdach', marker: 'TO DO' },
+  { _id: 'myid-3', departureAirport: 'SHV', marker: 'TO DO' },
+  {
+    _id: ObjectId('67edf6dfe40e5841248bf206'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'Florida',
+    distance: 2000,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  }
+]
+
+-----------------------------------------------------
+
+*Insert Many* 
+[
+{
+    departureAirport: 'PP',
+    arrivalAirport: 'LA',
+    distance: 2400,
+    intercontinental: true,
+    aircraft: 'Cambodia Air',
+  },
+{
+    departureAirport: 'BKK',
+    arrivalAirport: 'South Dakota',
+    distance: 2800,
+    intercontinental: true,
+    aircraft: 'Air Force 1',
+  }
+] 
+
+>> db.flight.insertMany([ { departureAirport: 'PP', arrivalAirport: 'LA', distance: 2400, intercontinental: true, aircraft: 'Cambodia Air' }, { departureAirport: 'BKK', arrivalAirport: 'South Dakota', distance: 2800, intercontinental: true, aircraft: 'Air Force 1' }] )
+
+
+==> Result: 
+
+[
+  {
+    _id: ObjectId('67ede790e40e5841248bf205'),
+    departureAirport: 'Phnom Penh',
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air',
+    marker: 'TO DO'
+  },
+  { _id: 'myid-2', departureAirport: 'Kos Sdach', marker: 'TO DO' },
+  { _id: 'myid-3', departureAirport: 'SHV', marker: 'TO DO' },
+  {
+    _id: ObjectId('67edf6dfe40e5841248bf206'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'Florida',
+    distance: 2000,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  },
+  {
+    _id: ObjectId('67edf7e4e40e5841248bf207'),
+    departureAirport: 'PP',
+    arrivalAirport: 'LA',
+    distance: 2400,
+    intercontinental: true,
+    aircraft: 'Cambodia Air'
+  },
+  {
+    _id: ObjectId('67edf7e4e40e5841248bf208'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'South Dakota',
+    distance: 2800,
+    intercontinental: true,
+    aircraft: 'Air Force 1'
+  }
+]
+
+
+====================================================================
+
+1. Find Equal = 
+
+studentDB> db.flight.find({intercontinental: true})
+[
+  {
+    _id: ObjectId('67edf6dfe40e5841248bf206'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'Florida',
+    distance: 2000,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  },
+  {
+    _id: ObjectId('67edf7e4e40e5841248bf207'),
+    departureAirport: 'PP',
+    arrivalAirport: 'LA',
+    distance: 2400,
+    intercontinental: true,
+    aircraft: 'Cambodia Air'
+  },
+  {
+    _id: ObjectId('67edf7e4e40e5841248bf208'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'South Dakota',
+    distance: 2800,
+    intercontinental: true,
+    aircraft: 'Air Force 1'
+  }
+]
+
+2. Find Getter than "{$gt:---}
+
+studentDB> db.flight.find({distance:{$gt:2000}})
+[
+  {
+    _id: ObjectId('67edf7e4e40e5841248bf207'),
+    departureAirport: 'PP',
+    arrivalAirport: 'LA',
+    distance: 2400,
+    intercontinental: true,
+    aircraft: 'Cambodia Air'
+  },
+  {
+    _id: ObjectId('67edf7e4e40e5841248bf208'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'South Dakota',
+    distance: 2800,
+    intercontinental: true,
+    aircraft: 'Air Force 1'
+  }
+]
+
+3. Find Getter than Equal "{$gt:---}
+studentDB> db.flight.find({distance:{$gte:2000}})
+[
+  {
+    _id: ObjectId('67edf6dfe40e5841248bf206'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'Florida',
+    distance: 2000,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  },
+  {
+    _id: ObjectId('67edf7e4e40e5841248bf207'),
+    departureAirport: 'PP',
+    arrivalAirport: 'LA',
+    distance: 2400,
+    intercontinental: true,
+    aircraft: 'Cambodia Air'
+  },
+  {
+    _id: ObjectId('67edf7e4e40e5841248bf208'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'South Dakota',
+    distance: 2800,
+    intercontinental: true,
+    aircraft: 'Air Force 1'
+  }
+]
+
+4. Find with AND condition 
+
+studentDB> db.flight.find({intercontinental: true, arrivalAirport: 'South Dakota'})
+[
+  {
+    _id: ObjectId('67edf7e4e40e5841248bf208'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'South Dakota',
+    distance: 2800,
+    intercontinental: true,
+    aircraft: 'Air Force 1'
+  }
+]
+
+5. Replace Method 
+
+{
+    departureAirport: 'BKK',
+    arrivalAirport: 'PP',
+    distance: 350,
+    intercontinental: false,
+    aircraft: 'Angkor Air'
+  }
+
+Example: 
+
+>> db.flight.replaceOne({ _id: 'myid-2' }, { departureAirport: 'BKK', arrivalAirport: 'PP', distance: 350, intercontinental: false, aircraft: 'Angkor Air' })
+
+
+Then it will replace one field that have myid-2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

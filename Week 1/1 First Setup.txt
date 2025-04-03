@@ -11,12 +11,15 @@ Database -> Table -> Row (Columns)
 
 - Mongodb:
 
+- Table = Collection 
+- Row ជួរដេក = Document (សំគាល់ការរក្សទិន្នន័យមួយ Record ) 
+
 Database -> Collection -> Document (property or field)
 វាមានទំរង់ស្រដៀង JSON .  វាមិនប្រកាន់ទេ យើងប្រើ "" Or '' 
 
 + Person (collection) 
 
-Example1:
+Example1: Document 
 
 {
 name : "Piseth",
@@ -45,7 +48,7 @@ Example4: embaded field: or subdocument
 {
 name : "Piseth",
 age : 34,
-address :{ village:'ABC" , commune:'DE'}
+address :{ village:'ABC" , commune:'DE'} // embedded 
 }
 
 ទាំងអស់ខាងលើនឹងសុទ្ធតែជា  Document ទាំងអស់

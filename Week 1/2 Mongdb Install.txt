@@ -52,6 +52,7 @@ local            156.00 KiB
 studentDB         40.00 KiB
 
 *** ចង់មើល DB ***
+
 >> db.student.find()
 
 
@@ -59,6 +60,26 @@ studentDB> db.student.find()
 [
   { _id: ObjectId('673b0eb22d6229a3588bf202'), name: 'Vibol', age: 34 }
 ]
+
+>> add more data and have emmebd infor 
+
+>> studentDB> db.student.insertOne({name:"Thida",age:25,address:{village:'Phsar Touch',commune:'Tuol SangKae'}})
+
+>> db.student.find():
+
+studentDB> db.student.find()
+[
+  { _id: ObjectId('673b0eb22d6229a3588bf202'), name: 'Vibol', age: 34 },
+  { _id: ObjectId('67ede249e40e5841248bf203'), name: 'Dara', age: 30 },
+  {
+    _id: ObjectId('67ede4d4e40e5841248bf204'),
+    name: 'Thida',
+    age: 25,
+    address: { village: 'Phsar Touch', commune: 'Tuol SangKae' }
+  }
+]
+
+
 
 ---------------------------
 
@@ -79,8 +100,6 @@ carDB> db.carDB.find()
 យើងឃើញថាវាកើត ម្តង់មួយសម្រាប់ _id: ObjectId('673bf7dd581d2775548bf202')​==> _id: ObjectId('673bf874581d2775548bf203')
 
 
-
-
 ----------------------------- Insert Data to Collection : 
 Example we have JSON data then we want to add to our collection:
 
@@ -92,7 +111,7 @@ departureAirport:'Phnom Penh',
 arrivalAirport:'Sovannphumi',
 distance: 700,
 intercontinental: false,
-aircraft:'Bangkok Air
+aircraft:'Bangkok Air'
 } 
 
 
@@ -134,10 +153,56 @@ carDB> db.flight.find()
   { _id: 'myid-1', departureAirport: 'kos kong' }
 ]
 
--------------------- insert douplicate ID -- error 
+-------------------- insert duplicate ID -- error 
 
 >> carDB> db.flight.insertOne({departureAirport: 'Siem Reap',_id:'myid-1'})
+
 MongoServerError: E11000 duplicate key error collection: carDB.flight index: _id_ dup key: { _id: "myid-1" }
+
+==> Solution we change the _id: 
+
+>> db.flight.insertOne({departureAirport: 'Kos Sdach',_id:'myid-2'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

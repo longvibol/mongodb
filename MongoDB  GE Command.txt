@@ -16,6 +16,24 @@ MongoDB : GE Command
 
 >> carDB> db.carDB.find()
 
+5. Show Database 
+
+>> show dbs
+
+6. Select database 
+>> db.show 
+
+admin             40.00 KiB
+articledb         72.00 KiB
+carDB            144.00 KiB
+card_service_db   72.00 KiB
+config           108.00 KiB
+loan_service_db   72.00 KiB
+local            192.00 KiB
+studentDB        112.00 KiB
+
+>> use studentDB
+
 
 
 

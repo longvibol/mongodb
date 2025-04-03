@@ -1,0 +1,2 @@
+
+- Soft Delete : we just add the marker to the data but not deleted from real data 

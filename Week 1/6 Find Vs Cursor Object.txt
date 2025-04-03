@@ -1,0 +1,325 @@
+Data sample :
+
+user:
+
+{
+username:"A1",
+rank: 32
+},
+{
+username:"A2",
+rank: 34
+},
+{
+username:"A3",
+rank: 32
+},
+{
+username:"A4",
+rank: 32
+},
+{
+username:"A5",
+rank: 32
+},
+{
+username:"A6",
+rank: 32
+},
+{
+username:"A7",
+rank: 32
+},
+{
+username:"A8",
+rank: 32
+},
+{
+username:"A9",
+rank: 32
+},
+{
+username:"A10",
+rank: 32
+},
+{
+username:"A11",
+rank: 32
+},
+{
+username:"A12",
+rank: 32
+},
+{
+username:"A13",
+rank: 32
+},
+{
+username:"A14",
+rank: 32
+},
+{
+username:"A15",
+rank: 32
+},
+{
+username:"A16",
+rank: 32
+},
+{username:"A17", rang: 32},
+{username:"A18", rang: 32},
+{username:"A19", rang: 32},
+{username:"A20", rang: 32},
+{username:"A21", rang: 32},
+{username:"A22", rang: 32},
+
+
+==> Typing : 
+
+db.uers.insertMany([{ username:"A1", rank: 32 }, { username:"A2", rank: 34 }, { username:"A3", rank: 32 }, { username:"A4", rank: 32 }, { username:"A5", rank: 32 }, { username:"A6", rank: 32 }, { username:"A7", rank: 32 }, { username:"A8", rank: 32 }, { username:"A9", rank: 32 }, { username:"A10", rank: 32 }, { username:"A11", rank: 32 }, { username:"A12", rank: 32 }, { username:"A13", rank: 32 }, { username:"A14", rank: 32 }, { username:"A15", rank: 32 }, { username:"A16", rank: 32 }, {username:"A17", rang: 32}, {username:"A18", rang: 32}, {username:"A19", rang: 32}, {username:"A20", rang: 32}, {username:"A21", rang: 32}, {username:"A22", rang: 32}, ])
+
+
+------------------------------------------------------------------------------
+
+* Importance * 
+
+- When we use method find() it return closer not object 
+
+Ex: at the moment we insert 22 object to users: 
+
+>> db.uers.find() : we see only 20 object (and in the javaScript it return only 20 object) 
+
+- reason : because in the Mongo sheel it base in JavaScript that why we see in the create 
+- them method find() it return closer only  
+
+==>1: Solution we can use forEach
+
+>> db.uers.find().forEach((data)=>{printjson(data)})
+
+==>1: Solution we can use forEach
+
+==>2: Solution We call method To Arrays: 
+
+>> db.uers.find().toArray()
+
+
+** Projection ** Filter Out 
+
+ពេលដែលយើងចង់បង្ហាញតែ Data តែចំនួនតិចលើ Screen ចឹងគេប្រើ Projection (can cut bandwith on internet) 
+
+>> studentDB> db.flight.find({},{departureAirport:1})
+[
+  {
+    _id: ObjectId('67ede790e40e5841248bf205'),
+    departureAirport: 'Phnom Penh'
+  },
+  { _id: 'myid-2', departureAirport: 'BKK' },
+  { _id: 'myid-3', departureAirport: 'SHV' },
+  {
+    _id: ObjectId('67edf6dfe40e5841248bf206'),
+    departureAirport: 'BKK'
+  },
+  { _id: ObjectId('67edf7e4e40e5841248bf207'), departureAirport: 'PP' },
+  {
+    _id: ObjectId('67edf7e4e40e5841248bf208'),
+    departureAirport: 'BKK'
+  }
+]
+
+Note In : Option if we put 1 យក 0 មិនយក(ដក់ចេញ)
+
+Exmaple on 0:
+
+>> studentDB> db.flight.find({},{departureAirport:0})
+[
+  {
+    _id: ObjectId('67ede790e40e5841248bf205'),
+    arrivalAirport: 'Sovannphumi',
+    distance: 700,
+    intercontinental: false,
+    aircraft: 'Bangkok Air',
+    marker: 'TO DO'
+  },
+  {
+    _id: 'myid-2',
+    arrivalAirport: 'PP',
+    distance: 350,
+    intercontinental: false,
+    aircraft: 'Angkor Air'
+  },
+  { _id: 'myid-3', marker: 'TO DO' },
+  {
+    _id: ObjectId('67edf6dfe40e5841248bf206'),
+    arrivalAirport: 'Florida',
+    distance: 2000,
+    intercontinental: true,
+    aircraft: 'Bangkok Air'
+  },
+  {
+    _id: ObjectId('67edf7e4e40e5841248bf207'),
+    arrivalAirport: 'LA',
+    distance: 2400,
+    intercontinental: true,
+    aircraft: 'Cambodia Air'
+  },
+  {
+    _id: ObjectId('67edf7e4e40e5841248bf208'),
+    arrivalAirport: 'South Dakota',
+    distance: 2800,
+    intercontinental: true,
+    aircraft: 'Air Force 1'
+  }
+]
+
+Example 2:
+
+studentDB> db.flight.find({},{departureAirport:1,_id:0})
+[
+  { departureAirport: 'Phnom Penh' },
+  { departureAirport: 'BKK' },
+  { departureAirport: 'SHV' },
+  { departureAirport: 'BKK' },
+  { departureAirport: 'PP' },
+  { departureAirport: 'BKK' }
+]
+
+Example 3: 
+
+studentDB> db.flight.find({},{departureAirport:1,_id:0,arrivalAirport:1})
+[
+  { departureAirport: 'Phnom Penh', arrivalAirport: 'Sovannphumi' },
+  { departureAirport: 'BKK', arrivalAirport: 'PP' },
+  { departureAirport: 'SHV' },
+  { departureAirport: 'BKK', arrivalAirport: 'Florida' },
+  { departureAirport: 'PP', arrivalAirport: 'LA' },
+  { departureAirport: 'BKK', arrivalAirport: 'South Dakota' }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
