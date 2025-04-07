@@ -1,0 +1,23 @@
+Ex: we want to have relationship with person and car 
+
+>> db.persons.insertOne({name:"Dara",age:35, car:{model:"Lexus 570",price:1000}})
+
+- We can see that when we want to get personal information it need to get the Car relation. 
+==> slow want take resource ==> we need to separate Person and Car 
+
+------------------------
+
+Drop collection 
+
+>> db.persions.drop()
+-----------------------------------------
+
+Better ways:
+
+1. We create persons collection 
+
+>> db.persons.insertOne({name:"Dara",age:35, _id:"dara-id"})
+
+2. We create Cars collection separate ant keep the reference Id 
+
+>> db.cars.insertOne({model:"BMW",price:80000,owner:"dara-id"})

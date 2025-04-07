@@ -1,0 +1,56 @@
+One to One : We use Embedded 
+
+- Patient and Summary:
+
+Ex: One patient has one disease summary, a disease summary belongs to one patient 
+
+--------------------------------------------------------------------------------------
+
++ Create collection : patients
+
+>> db.patients.insertOne({name:"Dara",age:25, diseaseSummary:"summary-dara-1"})
+
+
++ Create collection : diseaseSummaries
+
+>> db.diseaseSummaries.insertOne({_id:"summary-dara-1",diseases:["cold","borken leg"]})
+
+==> 
+
+db.diseaseSummaries.findOne()
+{ _id: 'summary-dara-1', diseases: [ 'cold', 'borken leg' ] }
+
+We want to see the patients with the his diseaseSummary
+
+>> var dsid = db.patients.findOne({name:"Dara"}).diseaseSummary
+
+យើងបង្កើត Variable one to store the filter 
+
+>> db.diseaseSummaries.findOne({_id:dsid})
+
+==>  
+
+{ _id: 'summary-dara-1', diseases: [ 'cold', 'borken leg' ] }
+
+
+Improve: in case this one to one we should use embedded field it easy to make the query faster! 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

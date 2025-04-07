@@ -1,0 +1,142 @@
+
+
+1. Understanding about the Schema and Data Type 
+2. Modelling Relation : 1:1, 1:N, N:N 
+3. Schema Validation : Data ណាចូលបាន Data ណាចូលមិនបាន 
+
+
+=====================
+
+Why do we use schema ?
+
+MongoDB enforces no schema! Document don't have to use the same schema inside of one collection. 
+But that doesn't mean that you can't use some kind of schema. 
+
+- Schema : Structure of our data 
+- collection = Table 
+- field = colume 
+- document = row 
+
+
+Example on : Collection : Product 
+
+1. Very  Different : ខុសគ្នាស្រលោះ អាចដាក់ចូលគ្នាបាន​
+
+{
+"title":"Book",
+"price":12,88
+
+},
+{
+"name": "Bottle",
+"available": true
+}
+
+2. Extra Data : have commend field and have extra field 
+
+{
+"title":"Book",
+"price":12,88
+
+},
+{
+"title":"Book",
+"price":12,88
+"available": ture
+},
+
+
+3. Full Equality : the same DBMS : postgres MySQL … 
+
+{
+"title":"Book",
+"price":12,88
+
+},
+{
+"title":"Book1",
+"price":12
+
+} 
+
+In general we use 2 and 3 because number 1 is very difference. 
+but in num 2 and 3 it have some common field so we can us it to create schema 
+
+------------------------------------------------------------------------------------------------------
+
+Data Type :
+
+- Text : "Dara"
+- Boolean: true
+- Number: Integer(int32) 55, NumberLong(int64), NumberDecimal 12.55
+- ObjectId: ObjectId("Sadaf")
+- ISOData("2018-09-10")
+- Timestamp: Timestamp(112233344)
+- Embedded Document: {"a":{….}}
+- Array: {"b":[...]}
+
+
+Example :
+
+db.companies.insertOne({name:"Piseth Java School", isStartup: true, employee:60, fundings:12345678901234567890,details:{ceo:"Piseth"},tag:["technology","education","java"],foundingDate: new Date(), insertedAt: new Timestamp()})
+
+==> 
+
+newDB> db.companies.find()
+[
+  {
+    _id: ObjectId('67ef41ce27db281bf38bf202'),
+    name: 'Piseth Java School',
+    isStartup: true,
+    employee: 60,
+    fundings: 12345678901234567000,
+    details: { ceo: 'Piseth' },
+    tag: [ 'technology', 'education', 'java' ],
+    foundingDate: ISODate('2025-04-04T02:19:58.414Z'),
+    insertedAt: Timestamp({ t: 1743733198, i: 1 })
+  }
+]
+
+
+- Remake on the fundings: 12345678901234567000, because it is bigger that what it can store ==> solution when we 
+have number bigger like that we can keep it as String. 
+
+>> db.companies.insertOne({name:"Piseth Java School", isStartup: true, employee:60, fundings:"12345678901234567890",details:{ceo:"Piseth"},tag:["technology","education","java"],foundingDate: new Date(), insertedAt: new Timestamp()})
+
+==> 
+
+{
+    _id: ObjectId('67ef42d327db281bf38bf203'),
+    name: 'Piseth Java School',
+    isStartup: true,
+    employee: 60,
+    fundings: '12345678901234567890',
+    details: { ceo: 'Piseth' },
+    tag: [ 'technology', 'education', 'java' ],
+    foundingDate: ISODate('2025-04-04T02:24:19.268Z'),
+    insertedAt: Timestamp({ t: 1743733459, i: 1 })
+  }
+
+----------------------------------------
+
+Find Type of the field :
+
+>> typeof db.companies.findOne().name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

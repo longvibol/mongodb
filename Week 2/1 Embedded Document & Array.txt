@@ -1,0 +1,172 @@
+Embedded Document 
+
+- Can embedded to 100 levels 
+- One document  Max 16MB per document 
+
+Ex : this is one document 
+
+{
+    _id: ObjectId('67edf7e4e40e5841248bf208'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'South Dakota',
+    distance: 2800,
+    intercontinental: true,
+    aircraft: 'Air Force 1'
+  }
+
+- Array is also embedded 
+- Array can hold any kind data 
+
+Example1 on embedded : 
+
+{
+    _id: ObjectId('67edf7e4e40e5841248bf208'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'South Dakota',
+    distance: 2800,
+    intercontinental: true,
+    aircraft: 'Air Force 1',
+	status: {description: "on-time", lastUpdate: "2 hours ago"}
+  }
+
+
+Ex2: Update One with Array[String] 
+
+db.flight.updateOne({_id: ObjectId('67edf7e4e40e5841248bf208')},{$set: {nationality:["Cambodia","Thai"]}})
+
+==> 
+
+{
+    _id: ObjectId('67edf7e4e40e5841248bf208'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'South Dakota',
+    distance: 2800,
+    intercontinental: true,
+    aircraft: 'Air Force 1',
+    status: { description: 'on-time', lastUpdate: '2 hours ago' },
+    nationality: [ 'Cambodia', 'Thai' ]
+  }
+
+Ex3: Update One with Array[Integer] 
+
+db.flight.updateOne({_id: ObjectId('67edf7e4e40e5841248bf208')},{$set: {nationalityId:[23,45,67]}})
+
+==> 
+
+{
+    _id: ObjectId('67edf7e4e40e5841248bf208'),
+    departureAirport: 'BKK',
+    arrivalAirport: 'South Dakota',
+    distance: 2800,
+    intercontinental: true,
+    aircraft: 'Air Force 1',
+    status: { description: 'on-time', lastUpdate: '2 hours ago' },
+    nationality: [ 'Cambodia', 'Thai' ],
+    nationalityId: [ 23, 45, 67 ]
+  }
+
+
+Ex4: Update One with Array[with Object]
+
+db.flight.updateOne({_id: ObjectId('67edf7e4e40e5841248bf207')},{$set: {nationalityId:[{countryCode:"KH",name:"Cambodia"},{countryCode:"TH",name:"Thailand"}]}})
+
+==> 
+
+{
+    _id: ObjectId('67edf7e4e40e5841248bf207'),
+    departureAirport: 'PP',
+    arrivalAirport: 'LA',
+    distance: 2400,
+    intercontinental: true,
+    aircraft: 'Cambodia Air',
+    status: { description: 'on-time', lastUpdate: '2 hours ago' },
+    nationalityId: [
+      { countryCode: 'KH', name: 'Cambodia' },
+      { countryCode: 'TH', name: 'Thailand' }
+    ]
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

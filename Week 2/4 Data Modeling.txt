@@ -1,0 +1,30 @@
+** Data Schemas & Data Modelling **   
+
+1- Which Data does my App need or generate? យើងចង់ដឹងថា តើការប្រើប្រាស់យើងសំដៅទៅលើអី system នឹង
+
+Ex:
+
+- User Information, Product Information, Orders,...
+- Defines the Field you'll need (and how they relate) 
+
+2-Where do I need my Data? User interface ​ប្រើកន្លែងណា
+
+- Welcome Page, Products List page, Order Page,...
+- Defines your required collection (table) + field groupings 
+
+3-​ What kind of Data or Information do I want to display? បង្ហាញនៅកន្លែងណា អីគេខ្លះទៅអ្នកប្រើប្រាស់
+- Welcome Page, Products List page, Order Page,...
+==> Defines which queries you'll need 
+
+4- How often do I fetch my data ? តើយើងធ្វើការទាញ Data យើងញឹកញ៉ប់អត់
+For every page reload 
+Defines whether you should optimize for easy fetching 
+
+មានន័យថា បើ field មួយណាយើងធ្វើការទាញញឹកញ៉ាប់ គឺយើងត្រូវដាក់វាចូលគ្នាមួយដុំ កុំអោយចំណាយពេលយូរ 
+
+5- How often do I write or change my data? តើយើងធ្វើការ Update Data យើងញឹកញ៉ប់អត់ ឬផ្លាស់ប្តូរញឹកញ៉ប់អត់
+Order => often, Product Data => rarely 
+Defines whether you should optimize for easy writing 
+
+
+

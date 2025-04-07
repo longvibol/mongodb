@@ -1,0 +1,47 @@
+Ex1:findOne
+
+studentDB> db.flight.findOne()
+{
+  _id: ObjectId('67ede790e40e5841248bf205'),
+  departureAirport: 'Phnom Penh',
+  arrivalAirport: 'Sovannphumi',
+  distance: 700,
+  intercontinental: false,
+  aircraft: 'Bangkok Air',
+  marker: 'TO DO',
+  status: { description: 'on-time', lastUpdate: '2 hours ago' }
+}
+
+Ex2: findOne->status
+
+db.flight.findOne({_id: ObjectId('67ede790e40e5841248bf205')}).status
+
+=>
+
+{ description: 'on-time', lastUpdate: '2 hours ago' }
+
+Ex3: findOne->status-> description
+
+==> on-time
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

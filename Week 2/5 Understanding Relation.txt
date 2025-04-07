@@ -1,0 +1,83 @@
+1. Embedded Document 
+2. Reference 
+
+------------------------------------
+
+** Embedded Document :
+
+Collection : Customer 
+
+{
+name: "Vibol",
+age: 35,
+address: {village:"TTP", commune:"TK"}
+}
+
+==> address: {village:"TTP", commune:"TK"} is the embedded 
+
+** References: យើងបង្កើត collection ថ្មីដើម្បីធ្វើជា Reference 
+
+{
+name: "Dara",
+favBooks:[{title:"Java Basic", price: 30$},{title: "Data Sturcture", pirce:30}]
+},
+
+{
+name: "Thida",
+favBooks:[{title:"Java Basic level1", price: 30$},{title: "Data Sturcture", pirce:30},{title:"Jsdfava Basic level1"}]
+},
+
+- ចឹងយើងឃើញថាបើ យើងកំណតចឹងពេលយើងចង់កែប្រែ title:"Java Basic level1 យើងត្រូវ update data ច្រើន
+
+Solution: 
+
+We create new collection Book: 
+
+{title:"Java Basic level1", price: 30$},
+
+{title: "Data Sturcture", pirce:30}
+
+Then in the collection Customer ==>
+
+{
+name: "Dara",
+favBooks:["bid1","bid2"]
+},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
