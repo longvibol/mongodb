@@ -21,3 +21,30 @@ Better ways:
 2. We create Cars collection separate ant keep the reference Id 
 
 >> db.cars.insertOne({model:"BMW",price:80000,owner:"dara-id"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

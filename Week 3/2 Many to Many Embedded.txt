@@ -1,0 +1,300 @@
+Many To Many with Embedded:  
+
+Customers and Products 
+
+- One Customer can buy many products, one Product belong to many customer. 
+
+Customer and Product need to have middle relationship : [Via Order] 
+
+Ex: 
+
+1. Customners 
+
+Id Name Age
+1  Dara 32
+
+-------------------------
+
+2. Products
+
+ID Name 
+1  iPhone 
+2 Samsung S24
+
+--------------------------
+
+3. Orders 
+
+Customer_id Product_id Quantity 
+
+1           1		5
+2	    2		3
+2	    1		1
+
+-----------------------------------------------------------------------------------------------
+
+Ex: Many To Many : Reference  
+
+1. InsertOne Customers 
+
+>> db.products.insertOne({title:"iPhone 16", price:1400})
+
+2. InsertOne Products 
+
+>> db.customers.insertOne({name:"Piseth",age:34})
+
+3. InsertOne Orders 
+
+>> db.orders.insertOne({customerId:ObjectId('67f3404d4a094ebe2b8bf203'), productId:ObjectId('67f3402b4a094ebe2b8bf202'), quantity:6})
+
+----------------------------------------------------------------------------------------------
+
+In MongoDB we can Many To Many :
+
+>> db.customers.insertOne({name:"Piseth",age:34,order:[{title:"iphone 16", quantity:2},{title:"Samsung S24",quantity:3}]})
+{
+  acknowledged: true,
+  insertedId: ObjectId('67f346a24a094ebe2b8bf205')
+}
+prodcutDB> db.customers.find()
+[
+  {
+    _id: ObjectId('67f346a24a094ebe2b8bf205'),
+    name: 'Piseth',
+    age: 34,
+    order: [
+      { title: 'iphone 16', quantity: 2 },
+      { title: 'Samsung S24', quantity: 3 }
+    ]
+  }
+]
+
+This is one collections we no need to crate order collection :
+In this option we can see that it have duplication information in the title: 'iphone 16' 
+
+
+=======================================================================================================
+
+Option Three : we have Customer and Product 
+
+1. We create Orders 
+
+>> db.products.insertOne({ title: 'iphone 16', quantity: 7})
+
+2. We create Customer 
+
+>> db.customers.insertOne({name:"Dany",age:34,order:[{productId:ObjectId('67f34a1c4a094ebe2b8bf207'), quantity: 10}]})
+
+==>
+
+{
+    _id: ObjectId('67f34ae24a094ebe2b8bf208'),
+    name: 'Dany',
+    age: 34,
+    order: [
+      { productId: ObjectId('67f34a1c4a094ebe2b8bf207'), quantity: 10 }
+    ]
+  }
+
+ចឹងតាមរយៈ Order Id នឹងយើងអាចទាញ Product មកបានហើយ. This step we create only two collection : Customer and Product 
+
+Summary this 3 Option :
+
+1. Have 3 Collection : Customer, Order, Products 
+2. Have 2 Collection : Customer and Order : 
+Disadvantage:
+- have duplicate data in Order : Title "iPhone 16" ពិបាកកែច្រើនកន្លែង
+
+AdvantageL
+
+- fast we can get the product order and see 
+
+
+3. Have 2 Collection : Customer and Products 
+
+យើងគិតចេះវិញ សម្រាប់ផលិតផលនឹងអតិថិជនបានទិញរួចរាល់ហើយ យើងមិនចាំបានកែក៏បានដែល​
+
+
+==> best solution we can crate on two in option number 3 : Customer and Prodcuts 
+
+
+prodcutDB> db.customers.find()
+[
+  {
+    _id: ObjectId('67f346a24a094ebe2b8bf205'),
+    name: 'Piseth',
+    age: 34,
+    order: [
+      { title: 'iphone 16', quantity: 2 },
+      { title: 'Samsung S24', quantity: 3 }
+    ]
+  }
+]
+
+
+=================================================================
+
+>> db.cutomers.insertOne({name:"Vandy", age:23,order:[{title:'iphone 16 pro',price: 1450, qty:3}]})
+
+prodcutDB> db.cutomers.find()
+[
+  {
+    _id: ObjectId('67f34ff64a094ebe2b8bf209'),
+    name: 'Vandy',
+    age: 23,
+    order: [ { title: 'iphone 16 pro', price: 1450, qty: 3 } ]
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

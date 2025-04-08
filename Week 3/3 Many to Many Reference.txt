@@ -1,0 +1,69 @@
+Many To Many With Reference 
+
+Example : Book & Author 
+
+One book has many authors, one author belongs to many book.
+សៀវភៅមួយ អាចមានអ្នកនិពិន្ធច្រើន និងអ្នកនិពន្ធម្នាក់អាចនិពន្ធសៀវភៅច្រើន 
+
+>> db.books.insertOne({title:"Java Basic", authors:[{name:"Piseth",age:34},{name:"Dara",age:25}]})
+
+prodcutDB> db.books.find()
+[
+  {
+    _id: ObjectId('67f355564a094ebe2b8bf20a'),
+    title: 'Java Basic',
+    authors: [ { name: 'Piseth', age: 34 }, { name: 'Dara', age: 25 } ]
+  }
+]
+
+==================================================================
+
+Reference : 
+
+>> db.authors.insertMany([{name:"Piseth",age:34, address:{village:"Phsar Toch", street:93}},{name: 'Dara', age:25, address:{street:"7 Makara"}}])
+
+prodcutDB> db.authors.find()
+[
+  {
+    _id: ObjectId('67f3579c4a094ebe2b8bf20b'),
+    name: 'Piseth',
+    age: 34,
+    address: { village: 'Phsar Toch', street: 93 }
+  },
+  {
+    _id: ObjectId('67f3579c4a094ebe2b8bf20c'),
+    name: 'Dara',
+    age: 25,
+    address: { street: '7 Makara' }
+  }
+]
+
+
+ចឹងយើងឃើញថាបើយើងត្រូវការប្តូរ ទិន្នន័យរបស់អ្នកនិពន្ធយើងត្រូវធ្វើការប្តូរច្រើន ==> difficult to edit 
+
+==> we should you reference easy in the books 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

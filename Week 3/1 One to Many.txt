@@ -1,0 +1,95 @@
+* One to Many Relations : Embedded 
+
+Example on : Stack Overflow 
+
+One question has many answer, one answer belong to one question. 
+
+សំនួរមួយមាន ចំលើយជាច្រើន និង ចំលើយលើសំនួរមួយនឹង គឺសម្រាប់តែសំនួរមួយនឹងនោះទេ 
+
+----------------------------------------------------------------------------------
+
+Ex1 : Use reference (no recommend) 
+
+>> db.answer.insertMany([{_id:"q1a1", text:"You can learn from Youtube"},{_id:"q1a2",text:"Please learn from Teacher Piseth"},{_id:"q1a3",text:"Enroll Piseth Java School"}])
+
+
+
+
+Ex: We can use embedded when we do One to Many (Recommend easy to retrive the data 
+
+>> db.questions.insertOne({creator:"Piseth", question:"How can you learn Java",answer:[{text:"You can learn from Youtube"},{text:"Please learn from Teacher Piseth"}]})
+
+The same as comment in facebook, we can use Embeddd easy to retrive.
+
+
+** One to Many Relations: Reference 
+
+City & Citien 
+
+One city has many citizen, one citizen belong to one city 
+
+- នៅក្នុងទីក្រុងមួយ មានប្រជាជនច្រើន ហើយនៅទីក្រុងមួយនឹងអាចមានមនុស្សច្រើន បើយើងប្រើ embedded ពេលទាញមកមនុស្សច្រើនណាស់​ ចឹងយើងត្រូវធ្វើការដាក់ Reference វិញ 
+
+Ex: 
+
+>> db.cities.insertOne({name:"Phnom Penh",coordination:{lat:21,lng:55},_id:"city1"}) 
+
+យើងមិនអាចបង្កើត Reference នៅក្នុង City ទេព្រោះវាមានទំហំធំដដៃល ចឹងយើងត្រូវបង្កើតវានៅក្នុង citizen វិញ
+
+>> db.citizens.insertMany([{name:"Dara", cityId:"city1"},{name:"Thida",cityId:"city2"}])
+
+យើងបង្កើត Reference នឹងនៅក្នុង Citizen ដោយភ្ជាប់ទៅនឹង City វិញ
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
