@@ -42,6 +42,71 @@ typeof db.companies.findOne().name
 >> db.getCollectionNames()
 
 
+8. Check Validation Rules 
+
+>> db.getCollectionInfos()
+
+9. Deleted Validation Rules 
+db.runCommand({ collMod: "posts", validator: {}, validationLevel: "off" })
+
+*** 
+
+10. Drop collection 
+
+db.myCollection.drop() 
+
+>> db.posts.drop()
+
+
+11. Deleted field : 
+
+>> db.hobbies.deleteOne({_id:"movie"})
+
+studentDB> db.hobbies.find()
+[
+  { _id: 'sport', title: 'Sport' },
+  { _id: 'cooking', title: 'Cookding' },
+  { _id: 'car', title: 'car' }
+]
+
+=====================================================
+
+Note In transaction : rollback : meaning : 
+
+- if one of the condition error on the transaction it will rollback to do the first condition 
+- rollback mean do from first condition 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

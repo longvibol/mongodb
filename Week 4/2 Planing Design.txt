@@ -1,0 +1,78 @@
+Planning for a Project: Blog 
+
+what we have in the Blog:
+
+- Create Post 
+- Edit Post 
+- Delete Post 
+- Fetch Post
+- Fetch Posts
+
+Comment 
+
+==> Post, Comment, User 
+
+Entity :
+
+User(id, name, age, email,...)
+Post(id, title, text, tags) # Java, #OOP,
+Comment(id, text)
+
+====================================================
+
+Design 
+
+* Comment can be put in the Post: 
+Because :
+- not exit limit 16mb
+- a comment belong to only one post 
+
+* User : should not put inside the post. it is too much data  
+
+
+Example : 
+
+prodcutDB> db.posts.insertOne({title:"OPP Java", text:"Java is great programming with apply OOP",creator:ObjectId('67f4d369adb1bd549b8bf204'),commments:[{text:"Thank teacher for sharing",author:ObjectId('67f4d369adb1bd549b8bf205')}]})
+{
+  acknowledged: true,
+  insertedId: ObjectId('67f4d50eadb1bd549b8bf206')
+}
+prodcutDB> db.posts.find()
+[
+  {
+    _id: ObjectId('67f4d50eadb1bd549b8bf206'),
+    title: 'OPP Java',
+    text: 'Java is great programming with apply OOP',
+    creator: ObjectId('67f4d369adb1bd549b8bf204'),
+    commments: [
+      {
+        text: 'Thank teacher for sharing',
+        author: ObjectId('67f4d369adb1bd549b8bf205')
+      }
+    ]
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

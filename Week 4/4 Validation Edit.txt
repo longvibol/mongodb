@@ -1,0 +1,84 @@
+** There are two ways that we can put validation ** 
+
+2. After setup the collection : Keyword: db.runCommand
+
+------------------------------------
+Posts Sample: 
+
+{
+    title: 'OPP Java Basic',
+    text: 'Java is great programming with apply OOP',
+    creator: ObjectId('67f4d369adb1bd549b8bf204'),
+    comments: [
+      {
+        text: 'Thank teacher for sharing'}
+       ]
+  }
+
+====================================================================
+
+1. Validation Setup: 
+
+db.runCommand({
+    collMod:'posts',
+    validator:{
+        $jsonSchema:{
+            bsonType:'object',
+            required:['title','text','creator','comments'],
+            properties:{
+                title:{
+                    bsonType:'string',
+                    description:'Title of the post'
+                },
+                text:{
+                    bsonType:'string',
+                    description:'Text of the post'
+                },
+                creator:{
+                    bsonType:'objectId',
+                    description:'Creator of the post'
+                },
+                comments:{
+                    bsonType:'array',
+                    items:{
+                        bsonType:'object',
+                        required:['text','author'],
+                        properties:{
+                            text:{
+                                bsonType:'string',
+                                description:'Text of the post'
+                            },
+                            author:{
+                                bsonType:'objectId',
+                                description:'Must be a valid ObjectId'
+                            }
+                        }
+                    }
+                }
+
+            }
+        },
+    validationAction:'error',
+    }
+})
+
+Noted : validationAction:'error' ==> is the default condition if something happen we can not insert 
+
+---------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

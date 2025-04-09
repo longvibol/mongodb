@@ -1,0 +1,318 @@
+** There are two ways that we can put validation ** 
+
+1. Set up before create collection 
+2. After setup the collection 
+
+------------------------------------
+Posts Sample: 
+
+{
+    title: 'OPP Java Basic',
+    text: 'Java is great programming with apply OOP',
+    creator: ObjectId('67f4d369adb1bd549b8bf204'),
+    comments: [
+      {
+        text: 'Thank teacher for sharing',
+        author: ObjectId('67f4d369adb1bd549b8bf205')
+      }
+    ]
+  }
+
+====================================================================
+
+1. Validation Setup: 
+
+db.createCollection('posts',
+    {
+    validator:{
+        $jsonSchema:{
+            bsonType:'object',
+            required:['title','text','creator','comments'],
+            properties:{
+                title:{
+                    bsonType:'string',
+                    description:'Title of the post'
+                },
+                text:{
+                    bsonType:'string',
+                    description:'Text of the post'
+                },
+                creator:{
+                    bsonType:'objectId',
+                    description:'Creator of the post'
+                },
+                comments:{
+                    bsonType:'array',
+                    items:{
+                        bsonType:'object',
+                        required:['text','author'],
+                        properties:{
+                            text:{
+                                bsonType:'string',
+                                description:'Text of the post'
+                            },
+                            author:{
+                                bsonType:'objectId',
+                                description:'Must be a valid ObjectId'
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+})  
+
+
+* check validation *
+
+>> db.getCollectionInfos()
+
+prodcutDB> db.getCollectionInfos()
+[
+  {
+    name: 'posts',
+    type: 'collection',
+    options: {
+      validator: {
+        '$jsonSchema': {
+          bsonType: 'object',
+          required: [ 'title', 'text', 'creator', 'comments' ],
+          properties: {
+            title: { bsonType: 'string', description: 'Title of the post' },
+            text: { bsonType: 'string', description: 'Text of the post' },
+            creator: {
+              bsonType: 'objectId',
+              description: 'Creator of the post'
+            },
+            comments: { bsonType: 'array', items: [Object] }
+          }
+        }
+      }
+    },
+    info: {
+      readOnly: false,
+      uuid: UUID('2a105cf2-3932-4deb-80e6-bae3357ee81c')
+    },
+    idIndex: { v: 2, key: { _id: 1 }, name: '_id_' }
+  },
+
+
+Example1: InseretOne()
+
+>> db.posts.insertOne({ title: 'OPP Java Basic', text: 'Java is great programming with apply OOP', creator: ObjectId('67f4d369adb1bd549b8bf204'), comments: [ { text: 'Thank teacher for sharing', author: ObjectId('67f4d369adb1bd549b8bf205') }] } )
+
+* this is correct answer :
+
+----------------- This is wrong insert sample without 'title' 
+
+{
+    text: 'Java is great programming with apply OOP',
+    creator: ObjectId('67f4d369adb1bd549b8bf204'),
+    comments: [
+      {
+        text: 'Thank teacher for sharing',
+        author: ObjectId('67f4d369adb1bd549b8bf205')
+      }
+    ]
+}
+
+--------------------------------------------------------------------------
+
+>> prodcutDB> db.posts.insertOne({
+...     text: 'Java is great programming with apply OOP',
+...     creator: ObjectId('67f4d369adb1bd549b8bf204'),
+...     comments: [
+...       {
+...         text: 'Thank teacher for sharing',
+...         author: ObjectId('67f4d369adb1bd549b8bf205')
+...       }
+...     ]
+... }
+... )
+Uncaught:
+MongoServerError: Document failed validation
+Additional information: {
+  failingDocumentId: ObjectId('67f5d609b0bcfc7a6a8bf203'),
+  details: {
+    operatorName: '$jsonSchema',
+    schemaRulesNotSatisfied: [
+      {
+        operatorName: 'required',
+        specifiedAs: { required: [ 'title', 'text', 'creator', 'comments' ] },
+        missingProperties: [ 'title' ]
+      }
+    ]
+  }
+}
+
+=================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==================== Command use full 
+
+8. Check Validation Rules 
+
+>> db.getCollectionInfos()
+
+9. Deleted Validation Rules 
+db.runCommand({ collMod: "posts", validator: {}, validationLevel: "off" })
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

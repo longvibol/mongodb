@@ -1,0 +1,133 @@
+Order Insert : 
+
+>> db.hobbies.insertMany([{_id:"sport",title:"Sport"},{_id:"cooking",title:"Cookding"},{_id:"car",title:"car"}])
+
+==>
+
+studentDB> db.hobbies.find()
+[
+  { _id: 'sport', title: 'Sport' },
+  { _id: 'cooking', title: 'Cookding' },
+  { _id: 'car', title: 'car' }
+]
+
+==> Scenario we want to create duplicate  
+
+>> db.hobbies.insertMany([{_id:"movie",title:"Movie"},{_id:"cooking",title:"Cookding"},{_id:"song",title:"Song"}])
+
+Then it will error because it have duplicate key in "cooking"
+
+Error result : 
+
+Uncaught:
+MongoBulkWriteError: E11000 duplicate key error collection: studentDB.hobbies index: _id_ dup key: { _id: "cooking" }
+Result: BulkWriteResult {
+  insertedCount: 1,
+  matchedCount: 0,
+  modifiedCount: 0,
+  deletedCount: 0,
+  upsertedCount: 0,
+  upsertedIds: {},
+  insertedIds: { '0': 'movie' }
+}
+Write Errors: [
+  WriteError {
+    err: {
+      index: 1,
+      code: 11000,
+      errmsg: 'E11000 duplicate key error collection: studentDB.hobbies index: _id_ dup key: { _id: "cooking" }',
+      errInfo: undefined,
+      op: { _id: 'cooking', title: 'Cookding' }
+    }
+  }
+]
+
+
+==> studentDB> db.hobbies.find()
+[
+  { _id: 'sport', title: 'Sport' },
+  { _id: 'cooking', title: 'Cookding' },
+  { _id: 'car', title: 'car' },
+  { _id: 'movie', title: 'Movie' }
+]
+
+ចឹងយើងឃើញថាវាចូលបាន អាខាងមុខវា​ ព្រោះវា Order Insert : it is default 
+
+----------------------------------------------------------------------------------------
+
+Solution : យើងជាអ្នកកំណត់ បើចង់អោយវា add ចូលយើងត្រូវដាក់ ordered: false ជា default it is "true"
+
+>> db.hobbies.deleteOne({_id:"movie"})
+
+>>  db.hobbies.insertMany([{_id:"movie",title:"Movie"},{_id:"cooking",title:"Cookding"},{_id:"song",title:"Song"},{ordered:false}])
+
+>> 
+
+db.hobbies.insertMany([],{}) - {} : it called configuration 
+
+>> studentDB> db.hobbies.find()
+[
+  { _id: 'sport', title: 'Sport' },
+  { _id: 'cooking', title: 'Cookding' },
+  { _id: 'car', title: 'car' },
+  { _id: 'movie', title: 'Movie' }
+]
+
+ចឹងយើងឃើញថាវា Insert ចូលទោះបីវាមាន duplicate key ក៏បាន
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

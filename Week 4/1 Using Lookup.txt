@@ -1,0 +1,214 @@
+1. Look Up : 
+
+prodcutDB> db.books.find()
+[
+  {
+    _id: ObjectId('67f355564a094ebe2b8bf20a'),
+    title: 'Java Basic',
+    authors: [ { name: 'Piseth', age: 34 }, { name: 'Dara', age: 25 } ]
+  },
+  {
+    _id: ObjectId('67f4c4aeadb1bd549b8bf202'),
+    titile: 'Spring framework for Java Developer',
+    authors: []
+  },
+  {
+    _id: ObjectId('67f4c5a7adb1bd549b8bf203'),
+    titile: 'Spring framework for Java Developer',
+    authors: [
+      ObjectId('67f3579c4a094ebe2b8bf20b'),
+      ObjectId('67f3579c4a094ebe2b8bf20c')
+    ]
+  }
+]
+
+==> Remove some field using : deleteOne
+
+>> db.books.deleteOne({_id: ObjectId('67f355564a094ebe2b8bf20a')})
+
+==> Result:  
+
+prodcutDB> db.books.find()
+[
+  {
+    _id: ObjectId('67f4c5a7adb1bd549b8bf203'),
+    titile: 'Spring framework for Java Developer',
+    authors: [
+      ObjectId('67f3579c4a094ebe2b8bf20b'),
+      ObjectId('67f3579c4a094ebe2b8bf20c')
+    ]
+  }
+]
+
+---------------------------------------------------------------------------------
+
+prodcutDB> db.books.aggregate([{$lookup:{from:"authors",localField:"authors",foreignField:"_id",as:"authorsData"}}])
+[
+  {
+    _id: ObjectId('67f4c5a7adb1bd549b8bf203'),
+    titile: 'Spring framework for Java Developer',
+    authors: [
+      ObjectId('67f3579c4a094ebe2b8bf20b'),
+      ObjectId('67f3579c4a094ebe2b8bf20c')
+    ],
+    authorsData: [
+      {
+        _id: ObjectId('67f3579c4a094ebe2b8bf20b'),
+        name: 'Piseth',
+        age: 34,
+        address: { village: 'Phsar Toch', street: 93 }
+      },
+      {
+        _id: ObjectId('67f3579c4a094ebe2b8bf20c'),
+        name: 'Dara',
+        age: 25,
+        address: { street: '7 Makara' }
+      }
+    ]
+  }
+]
+
+--------------
+
+Keyword: 
+
+db.books.aggregate([
+
+{
+$lookup:{
+
+	from:"books",
+	localField: "favBook",
+	forignField: "_id",
+	as: " favBook "
+
+}
+}
+
+])
+
+- ចេញពី Books collection យើងចង់រកតើ 
+
+authors: [
+      ObjectId('67f3579c4a094ebe2b8bf20b'),
+      ObjectId('67f3579c4a094ebe2b8bf20c')
+    ]
+
+វាត្រូវទៅនឹង ទិន្នន័យអ្នកនិពន្ធមួយណា​
+
+- from : ចេញពីអីគេ field? = authors: [
+      ObjectId('67f3579c4a094ebe2b8bf20b'),
+      ObjectId('67f3579c4a094ebe2b8bf20c')
+    ]
+==> from:"authors"
+
+- localField : field របស់ from ==> localField:"authors"
+
+- forignField: យើងចឹងបានពីណាមក គឺអ្វីដែលយើងចង់បាន foreignField:"_id"
+
+- as: គឺជា ឈ្មោះសម្រាប់ collection ថ្មីយើងចង់បាន 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
