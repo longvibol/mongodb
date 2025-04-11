@@ -7,6 +7,191 @@ https://www.mongodb.com/docs/manual/reference/operator/query-array/
 - size 
 
 
+Example DB :
+
+newDB> db.users.find()
+[
+  {
+    _id: ObjectId('67f88fb3dd3d70fac28bf209'),
+    name: 'Piseth',
+    hobbies: [ { title: 'sport', fre: 5 }, { title: 'cooking', fre: 2 } ]
+  },
+  {
+    _id: ObjectId('67f88fd6dd3d70fac28bf20a'),
+    name: 'Dara',
+    hobbies: [ { title: 'fishing', fre: 5 }, { title: 'cooking', fre: 3 } ]
+  },
+  {
+    _id: ObjectId('67f88ff5dd3d70fac28bf20b'),
+    name: 'Thida',
+    hobbies: [ { title: 'car', fre: 6 }, { title: 'sport', fre: 2 } ]
+  },
+  {
+    _id: ObjectId('67f89017dd3d70fac28bf20c'),
+    name: 'Thida',
+    hobbies: [ 'sport', 'fishing', 'car' ]
+  }
+]
+
+-------------------------------------------------------------------------------------------------------
+
+1. ចង់រក ពីណាគេដែលមាន hobbies ត្រឹមបី​
+
+>> newDB> db.users.find({hobbies:{$size:3}})
+
+==>
+
+[
+  {
+    _id: ObjectId('67f89017dd3d70fac28bf20c'),
+    name: 'Thida',
+    hobbies: [ 'sport', 'fishing', 'car' ]
+  }
+]
+
+
+2 . Sample data 
+
+newDB> db.users.find()
+[
+  {
+    _id: ObjectId('67f88fb3dd3d70fac28bf209'),
+    name: 'Piseth',
+    hobbies: [ { title: 'sport', fre: 5 }, { title: 'cooking', fre: 2 } ]
+  },
+  {
+    _id: ObjectId('67f88fd6dd3d70fac28bf20a'),
+    name: 'Dara',
+    hobbies: [ { title: 'fishing', fre: 5 }, { title: 'cooking', fre: 3 } ]
+  },
+  {
+    _id: ObjectId('67f88ff5dd3d70fac28bf20b'),
+    name: 'Thida',
+    hobbies: [ { title: 'car', fre: 6 }, { title: 'sport', fre: 2 } ]
+  },
+  {
+    _id: ObjectId('67f89017dd3d70fac28bf20c'),
+    name: 'Thida',
+    hobbies: [ 'sport', 'fishing', 'car' ]
+  },
+  {
+    _id: ObjectId('67f8939fdd3d70fac28bf20d'),
+    name: 'Many',
+    hobbies: [ 'book', 'song' ]
+  },
+  {
+    _id: ObjectId('67f893d1dd3d70fac28bf20e'),
+    name: 'Dina',
+    hobbies: [ 'song', 'book' ]
+  }
+]
+
+យើងចង់រក hobbies ណាដែលមាន Song and book 
+
+>> db.users.find({hobbies:["song","book"]})
+
+វាបានតម្លៃតែមួយទេ ព្រោះវាប្រកាន់លំដាប់នៅក្នុង Mongodb 
+
+==> Show result only one 
+
+[
+  {
+    _id: ObjectId('67f893d1dd3d70fac28bf20e'),
+    name: 'Dina',
+    hobbies: [ 'song', 'book' ]
+  }
+]
+
+3. Find all the users that hobbies : song and book 
+
+>>db.users.find({hobbies:{$all:["song","book"]}})
+
+==> 
+
+[
+  {
+    _id: ObjectId('67f8939fdd3d70fac28bf20d'),
+    name: 'Many',
+    hobbies: [ 'book', 'song' ]
+  },
+  {
+    _id: ObjectId('67f893d1dd3d70fac28bf20e'),
+    name: 'Dina',
+    hobbies: [ 'song', 'book' ]
+  }
+]
+
+** ចង់រក hobbies = sport and fre > 3
+
+>> db.users.find({hobbies:{$elemMatch:{title:"sport",fre:{$gt:3}}}})
+
+
+==>
+
+
+[
+  {
+    _id: ObjectId('67f88fb3dd3d70fac28bf209'),
+    name: 'Piseth',
+    hobbies: [ { title: 'sport', fre: 5 }, { title: 'cooking', fre: 2 } ]
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
