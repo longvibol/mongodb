@@ -1,0 +1,380 @@
+Query Selector & Projection 
+
+- Comparison 
+- Logical 
+- Element 
+- Evaluation 
+- Array 
+- Comments 
+- Geospatial 
+
+Link Resource : 
+
+https://www.mongodb.com/docs/manual/reference/operator/query-comparison/
+
+- Sample 
+
+https://github.com/pisething/mongodb_course/tree/main
+
+
+==============================================================================
+Sample Data Movies:
+
+{
+    _id: ObjectId('67f5fbcedd4904de07b2b4d1'),
+    id: 21,
+    url: 'http://www.tvmaze.com/shows/21/the-last-ship',
+    name: 'The Last Ship',
+    type: 'Scripted',
+    language: 'English',
+    genres: [ 'Drama', 'Action', 'Thriller' ],
+    status: 'Running',
+    runtime: 60,
+    premiered: '2014-06-22',
+    officialSite: 'http://www.tntdrama.com/shows/the-last-ship',
+    schedule: { time: '21:00', days: [ 'Sunday' ] },
+    rating: { average: 7.8 },
+    weight: 100,
+    network: {
+      id: 14,
+      name: 'TNT',
+      country: {
+        name: 'United States',
+        code: 'US',
+        timezone: 'America/New_York'
+      }
+
+----------------------------------------------------------------------------
+
+1. Count 
+
+>> db.movies.find().count()
+
+2. specific field 
+
+>> db.movies.find({runtime:60})
+
+3. $eq : Matches values that are equal to a specified value
+
+>> db.movies.find({runtime:{$eq:60}}).count()
+
+==> 170
+
+4. $ne : Matches all values that are not equal to a specified value.
+
+>> db.movies.find({runtime:{$ne:60}})
+
+
+5. $gt :  Matches values that are greater than a specified value.
+
+>> db.movies.find({runtime:{$gt:60}}).count()
+
+==> 2
+
+------------------------------ Search Embedded two field or more than field ----------------
+
+* Embedded :  rating: { average: 7.8 },
+
+1. want movie that have rating more than 7 
+
+>> db.movies.find({"rating.average":7}) 
+
+or 
+
+>> db.movies.find({"rating.average":{$eq:7}}).count()
+
+--------------------------------------------------------------------------------
+
+* Find Arrays  
+
+genres: [ 'Drama', 'Action', 'Thriller' ],
+
+1. fine movie Drama ( អោយតាមាន Drama នៅក្នុង Array នឹងគឹវាបង្ហាញហើយ ) 
+
+>> db.movies.find({genres:"Drama"})
+
+- genres = is file so we put as field 
+
+- "Drama" is the element in the Array 
+
+==>
+
+{
+    _id: ObjectId('67f5fbcedd4904de07b2b4d4'),
+    id: 24,
+    url: 'http://www.tvmaze.com/shows/24/hawaii-five-0',
+    name: 'Hawaii Five-0',
+    type: 'Scripted',
+    language: 'English',
+    genres: [ 'Drama', 'Action', 'Crime' ],
+    status: 'Running',
+    runtime: 60,
+    premiered: '2010-09-20',
+    officialSite: 'http://www.cbs.com/shows/hawaii_five_0/',
+    schedule: { time: '21:00', days: [ 'Friday' ] },
+    rating: { average: 7.9 },
+    weight: 98,
+    network: {
+      id: 2,
+      name: 'CBS',
+      country: {
+        name: 'United States',
+        code: 'US',
+        timezone: 'America/New_York'
+      }
+
+2. Find only the "Drama"
+
+>> db.movies.find({genres:["Drama"]})
+
+==>
+
+{
+    _id: ObjectId('67f5fbcedd4904de07b2b5a6'),
+    id: 242,
+    url: 'http://www.tvmaze.com/shows/242/the-great-fire',
+    name: 'The Great Fire',
+    type: 'Scripted',
+    language: 'English',
+    genres: [ 'Drama' ],
+    status: 'Ended',
+    runtime: 60,
+    premiered: '2014-10-16',
+    officialSite: null,
+    schedule: { time: '21:00', days: [ 'Thursday' ] },
+    rating: { average: null },
+    weight: 0,
+    network: {
+      id: 35,
+      name: 'ITV',
+      country: { name: 'United Kingdom', code: 'GB', timezone: 'Europe/London' }
+    },
+    webChannel: null,
+    externals: { tvrage: 43397, thetvdb: 286969, imdb: 'tt3629782' },
+    image: {
+      medium: 'http://static.tvmaze.com/uploads/images/medium_portrait/1/4358.jpg',
+      original: 'http://static.tvmaze.com/uploads/images/original_untouched/1/4358.jpg'
+    },
+    summary: '<p>As the great fire tears London apart, this brand new epic drama details the heart-wrenching stories of a city and its people in crisis.</p>',
+    updated: 1504806814,
+    _links: {
+      self: { href: 'http://api.tvmaze.com/shows/242' },
+      previousepisode: { href: 'http://api.tvmaze.com/episodes/15829' }
+    }
+  }
+]
+
+ចឹងវាបង្ហាញតែ "Drama"
+
+3. count: 
+
+>> db.movies.find({genres:"Drama"}).count()
+
+
+---------------------------------- Find In and Not In 
+
+1. រកតែចំនួនណាដែលមាននៅក្នុង Arrays [] 
+
+>> db.movies.find({runtime:{$in:[30]}})
+
+វាចេះតែ Movie ណាដែលមាន រយៈពេល 30 គត់
+
+2. find movie that have runtime 30 និង 42
+
+>> db.movies.find({runtime:{$in:[30,42]}})
+
+វាមិនមែនជា ចន្លោះទេ វាបង្ហាញតែ លេខ​ 30 and 42 only 
+
+3. Not in $nin
+
+>> newDB> db.movies.find({runtime:{$nin:[30,42]}}) 
+
+- វាចាប់យកតែក្រៅពី លេខ 30 and 42 
+
+-------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

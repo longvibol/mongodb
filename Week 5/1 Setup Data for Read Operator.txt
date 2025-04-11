@@ -1,0 +1,24 @@
+Read Operator:
+
+- Methods, Filter & Operator 
+- Query Selector 
+- Projection 
+
+
+-------------------------------------
+
+Method, Filter & Operator 
+
+>> db.myCollection.findOne()
+
+- findOne : is the Method 
+
+Ex1: db.myCollection.find({age: 35}) // Equality | Single Value (if age == 35)
+
+Ex2: db.myCollection.find({age: {$gt: 35}}) // Rang it need to be getter than 35 (gt :greater than )
+
+Ex2: db.myCollection.find({age: {$ge: 35}}) // Rang it need to be getter than 35 (ge : greater equal)
+
+=============================================
+
+

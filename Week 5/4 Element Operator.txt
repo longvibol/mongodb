@@ -1,0 +1,314 @@
+Link: 
+
+https://www.mongodb.com/docs/manual/reference/operator/query-element/
+
+- $exists
+- $ type
+
+--------------------------------------------------
+
+Example we create new collection : users
+
+>> db.users.insertMany([{name:"Piseth",hobbies:[{title:"sport",fre:5},{titile:"cooking",fre:5}],phone:012334455},{name:"Dara",hobbies:[{titile:"fishing",fre:5},{titile:"cooking",fre:3}],phone:"099887766",age:30}])
+
+==> 
+
+[
+  {
+    _id: ObjectId('67f73a8120cb0108fb8bf202'),
+    name: 'Piseth',
+    hobbies: [ { title: 'sport', fre: 5 }, { titile: 'cooking', fre: 5 } ],
+    phone: 2734381
+  },
+  {
+    _id: ObjectId('67f73a8120cb0108fb8bf203'),
+    name: 'Dara',
+    hobbies: [ { titile: 'fishing', fre: 5 }, { titile: 'cooking', fre: 3 } ],
+    phone: '099887766',
+    age: 30
+  }
+]
+
+
+---------------------------------------------------------------------------------------
+
+1. find element or field that have age: true 
+
+>> db.users.find({age:{$exists: true}})
+
+==>
+
+[
+  {
+    _id: ObjectId('67f73a8120cb0108fb8bf203'),
+    name: 'Dara',
+    hobbies: [ { titile: 'fishing', fre: 5 }, { titile: 'cooking', fre: 3 } ],
+    phone: '099887766',
+    age: 30
+  }
+]
+
+2. find field that does not have field age: "false"
+
+>> db.users.find({age:{$exists: false}})
+
+==> 
+
+[
+  {
+    _id: ObjectId('67f73a8120cb0108fb8bf202'),
+    name: 'Piseth',
+    hobbies: [ { title: 'sport', fre: 5 }, { titile: 'cooking', fre: 5 } ],
+    phone: 2734381
+  }
+]
+
+------------------------------------------------------------------------------
+
+3. Combine condition : Want to find field document that have field "age" and this age >=30
+
+>> db.users.find({age:{$exists: true, $gte:30}})
+
+==> 
+[
+  {
+    _id: ObjectId('67f73a8120cb0108fb8bf203'),
+    name: 'Dara',
+    hobbies: [ { titile: 'fishing', fre: 5 }, { titile: 'cooking', fre: 3 } ],
+    phone: '099887766',
+    age: 30
+  }
+]
+
+4. ស្វែងរក Document ណារដែលមាន age 
+newDB> db.users.find({age:{$exists: true}})
+[
+  {
+    _id: ObjectId('67f73a8120cb0108fb8bf203'),
+    name: 'Dara',
+    hobbies: [ { titile: 'fishing', fre: 5 }, { titile: 'cooking', fre: 3 } ],
+    phone: '099887766',
+    age: 30
+  },
+  {
+    _id: ObjectId('67f741f820cb0108fb8bf204'),
+    name: 'Thida',
+    hobbies: [ { titile: 'Car', fre: 6 }, { titile: 'sport', fre: 2 } ],
+    phone: '099887766',
+    age: null
+  }
+]
+
+
+==> there are two result on age Dara and Thida 
+
+
+5. select age and not null 
+
+newDB> db.users.find({age:{$exists: true,$ne:null}})
+[
+  {
+    _id: ObjectId('67f73a8120cb0108fb8bf203'),
+    name: 'Dara',
+    hobbies: [ { titile: 'fishing', fre: 5 }, { titile: 'cooking', fre: 3 } ],
+    phone: '099887766',
+    age: 30
+  }
+]
+
+==> Only result Dara 
+
+
+--------------------------------------------------------------------------Type 
+
+Link : Mongo db data type :
+
+https://www.mongodb.com/docs/manual/reference/operator/query/type/
+
+1. type: number 
+
+newDB> db.users.find({phone:{$type:"number"}})
+[
+  {
+    _id: ObjectId('67f73a8120cb0108fb8bf202'),
+    name: 'Piseth',
+    hobbies: [ { title: 'sport', fre: 5 }, { titile: 'cooking', fre: 5 } ],
+    phone: 2734381
+  }
+]
+
+==> Piseth 
+
+
+2. type: string
+
+newDB> db.users.find({phone:{$type:"string"}})
+[
+  {
+    _id: ObjectId('67f73a8120cb0108fb8bf203'),
+    name: 'Dara',
+    hobbies: [ { titile: 'fishing', fre: 5 }, { titile: 'cooking', fre: 3 } ],
+    phone: '099887766',
+    age: 30
+  },
+  {
+    _id: ObjectId('67f741f820cb0108fb8bf204'),
+    name: 'Thida',
+    hobbies: [ { titile: 'Car', fre: 6 }, { titile: 'sport', fre: 2 } ],
+    phone: '099887766',
+    age: null
+  }
+]
+
+3. combine type : string and array 
+
+>> newDB> db.users.find({phone:{$type:["string","number"]}})
+
+==> 
+
+[
+  {
+    _id: ObjectId('67f73a8120cb0108fb8bf202'),
+    name: 'Piseth',
+    hobbies: [ { title: 'sport', fre: 5 }, { titile: 'cooking', fre: 5 } ],
+    phone: 2734381
+  },
+  {
+    _id: ObjectId('67f73a8120cb0108fb8bf203'),
+    name: 'Dara',
+    hobbies: [ { titile: 'fishing', fre: 5 }, { titile: 'cooking', fre: 3 } ],
+    phone: '099887766',
+    age: 30
+  },
+  {
+    _id: ObjectId('67f741f820cb0108fb8bf204'),
+    name: 'Thida',
+    hobbies: [ { titile: 'Car', fre: 6 }, { titile: 'sport', fre: 2 } ],
+    phone: '099887766',
+    age: null
+  }
+]
+
+
+--------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

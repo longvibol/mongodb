@@ -1,0 +1,188 @@
+Link : https://www.mongodb.com/docs/manual/reference/operator/query-logical/
+
+Or, and , not, nor :syntax :db.collectioName.find({$--[{$--},{$--}]})
+
+1. Using "$or" 
+
+find runtime less than 30 or greater than 60 
+
+>> db.movies.find({runtime:{$lt:30}}) 
+
+==> 2 document 
+
+>> db.movies.find({runtime:{$gt:60}})
+
+==> 2 document 
+
+So we can combine with this two condition 
+
+>> db.movies.find({$or:[{runtime:{$lt:30}},{runtime:{$gt:60}}]}) 
+
+==> 4 documents 
+
+=================================================================================
+
+2. $nor 
+
+>> db.movies.find({$nor:[{runtime:{$lt:30}},{runtime:{$gt:60}}]}).count()
+
+==> 236 
+
+3. find move Drama and time more than 30 min 
+
+>> db.movies.find({$and:[{runtime:{$gt:30}},{genres:["Drama"]}]}).count()
+==> 8
+
+{
+    _id: ObjectId('67f5fbcedd4904de07b2b5a6'),
+    id: 242,
+    url: 'http://www.tvmaze.com/shows/242/the-great-fire',
+    name: 'The Great Fire',
+    type: 'Scripted',
+    language: 'English',
+    genres: [ 'Drama' ],
+    status: 'Ended',
+    runtime: 60,
+    premiered: '2014-10-16',
+    officialSite: null,
+    schedule: { time: '21:00', days: [ 'Thursday' ] },
+    rating: { average: null },
+    weight: 0,
+    network: {
+      id: 35,
+      name: 'ITV',
+      country: { name: 'United Kingdom', code: 'GB', timezone: 'Europe/London' }
+    },
+
++ runtime: 60 and  genres: [ 'Drama' ] 
+
+
+* Short Cut with AND * Logical Qurey 
+
+We no need to put $and 
+
+>> db.movies.find({runtime:{$gt:30},genres:["Drama"]})
+
+==> 8 document 
+
+Why we create $and logic if it have short cut !
+
+Think this case below : 
+
+>>  db.movies.find({genres:"Drama",genres:"Horror"}).count()
+
+==> 23 document 
+
+វាចាប់យក តម្លៃ genres:"Horror" អោយតាមាន Horror movie វាយកមកហើយ វា Over Right លើ genres:"Drama"​ 
+ចឹងសម្រាប់ លទ្ធផល សុទ្ធតែមាន Horror 
+
+But if we use $AND វាយកតម្លៃពីរនឹង ផ្គួបចូលគ្នា
+
+>>db.movies.find({$and:[{genres:"Drama"},{genres:"Horror"}]}).count()
+
+==> 17 document 
+
+វាយក field ទាំងពីរនឹង ដែលមាន ជាប្រភេទ  genres: [ 'Drama', 'Horror' ]
+
+==> 
+{
+    _id: ObjectId('67f5fbcedd4904de07b2b58f'),
+    id: 218,
+    url: 'http://www.tvmaze.com/shows/218/being-human',
+    name: 'Being Human',
+    type: 'Scripted',
+    language: 'English',
+    genres: [ 'Drama', 'Horror', 'Romance' ],
+    status: 'Ended',
+    runtime: 60,
+    premiered: '2011-01-17',
+    officialSite: null,
+    schedule: { time: '21:00', days: [ 'Monday' ] },
+    rating: { average: 7.6 },
+    weight: 74,
+    network: {
+      id: 16,
+      name: 'Syfy',
+      country: {
+        name: 'United States',
+        code: 'US',
+        timezone: 'America/New_York'
+      }
+    },
+    webChannel: null,
+    externals: { tvrage: 24595, thetvdb: 196921, imdb: 'tt1595680' },
+    image: {
+      medium: 'http://static.tvmaze.com/uploads/images/medium_portrait/1/3627.jpg',
+      original: 'http://static.tvmaze.com/uploads/images/original_untouched/1/3627.jpg'
+    },
+    summary: '<p><b>Being Human</b> is a series based on the UK series of the same name. It is a supernatural orientated around a vampire, ghost and werewolf trying to live under the same household.</p>',
+    updated: 1508329498,
+    _links: {
+      self: { href: 'http://api.tvmaze.com/shows/218' },
+      previousepisode: { href: 'http://api.tvmaze.com/episodes/14391' }
+    }
+  },
+  {
+    _id: ObjectId('67f5fbcedd4904de07b2b595'),
+    id: 225,
+    url: 'http://www.tvmaze.com/shows/225/ravenswood',
+    name: 'Ravenswood',
+    type: 'Scripted',
+    language: 'English',
+    genres: [ 'Drama', 'Horror' ],
+    status: 'Ended',
+    runtime: 60,
+    premiered: '2013-10-22',
+    officialSite: null,
+    schedule: { time: '21:00', days: [ 'Tuesday' ] },
+    rating: { average: 7.2 },
+    weight: 68,
+    network: {
+      id: 26,
+      name: 'FreeForm',
+      country: {
+        name: 'United States',
+        code: 'US',
+        timezone: 'America/New_York'
+      }
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

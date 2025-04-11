@@ -1,0 +1,18 @@
+Link :
+
+https://www.mongodb.com/docs/manual/reference/operator/query-array/
+
+- $all
+- elemMatch
+- size 
+
+
+
+
+
+
+
+
+
+
+

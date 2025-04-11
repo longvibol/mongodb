@@ -1,0 +1,242 @@
+Link :
+
+https://www.mongodb.com/docs/manual/reference/operator/query-evaluation/
+
+- $expr 
+- $regex
+- $where 
+
+---------------------------------------------------------------------------------
+
+{
+    _id: ObjectId('67f5fbcedd4904de07b2b4d1'),
+    id: 21,
+    url: 'http://www.tvmaze.com/shows/21/the-last-ship',
+    name: 'The Last Ship',
+    type: 'Scripted',
+    language: 'English',
+    genres: [ 'Drama', 'Action', 'Thriller' ],
+    status: 'Running',
+    runtime: 60,
+    premiered: '2014-06-22',
+    officialSite: 'http://www.tntdrama.com/shows/the-last-ship',
+    schedule: { time: '21:00', days: [ 'Sunday' ] },
+    rating: { average: 7.8 },
+    weight: 100,
+    network: {
+      id: 14,
+      name: 'TNT',
+      country: {
+        name: 'United States',
+        code: 'US',
+        timezone: 'America/New_York'
+      }
+    },
+    webChannel: null,
+    externals: { tvrage: 33158, thetvdb: 269533, imdb: 'tt2402207' },
+    image: {
+      medium: 'http://static.tvmaze.com/uploads/images/medium_portrait/164/412464.jpg',
+      original: 'http://static.tvmaze.com/uploads/images/original_untouched/164/412464.jpg'
+    },
+    summary: "<p>Their mission is simple: Find a cure. Stop the virus. Save the world. When a global pandemic wipes out eighty percent of the planet's population, the crew of a lone naval destroyer must find a way to pull humanity from the brink of extinction.</p>",
+    updated: 1536575637,
+    _links: {
+      self: { href: 'http://api.tvmaze.com/shows/21' },
+      previousepisode: { href: 'http://api.tvmaze.com/episodes/1499133' },
+      nextepisode: { href: 'http://api.tvmaze.com/episodes/1499134' }
+    }
+  }
+]
+
+
+----------------------------------------------------
+
+1. Find summary in movie that have key word "simple" យើងចង់បាននៅក្នុង summary ដែលមានពាក្យ simple 
+
+>> db.movies.find({summary:{$regex:/simple/}})
+
+==>
+
+summary: "<p>Frank Martin returns as the Transporter with one very simple task - to deliver the package against all the odds. However, something that sounds so simple, is rarely so.</p><p>Joined by two new team members, Caterina Boldieu, an ex- DGSE agent and later in the series, Jules Faroux, a computer and mechanical whizz, Frank is hired to deliver a diverse range of packages - from pop princesses to priceless paintings.</p><p>Frank Martin takes the jobs no other transporter will touch or can achieve - simply because they are too challenging and the odds seemingly insurmountable. That is why he is considered the best transporter in the world.</p><p>Frank's jobs take him to many beautiful locations around the world, but they also draw him into danger and mystery. And more often than not, solving that mystery will lead Frank to successfully completing his mission.</p><p>However Frank's jobs aren't solely about the packages he must deliver but also about the people he meets. While his emphasis is always on completing the mission, Frank is unable to avoid the human emotions that come with dealing with clients in difficult situations - no matter how hard he tries.</p>",
+    updated: 1532989195,
+
+
+>> db.movies.find({summary:{$regex:/simple/}}).count() 
+
+==> 4
+
+========================================================================================================
+
+2. - $expr  : រកតម្លៃប្រៀបធៀបគ្នា​
+
+Example : sales
+
+>> db.sales.insertMany([{volume:120,target:100},{volume:150, target:200},{volume:170, target:150}])
+
+newDB> db.sales.find()
+[
+  {
+    _id: ObjectId('67f870b8dd3d70fac28bf202'),
+    volume: 120,
+    target: 100
+  },
+  {
+    _id: ObjectId('67f870b8dd3d70fac28bf203'),
+    volume: 150,
+    target: 200
+  },
+  {
+    _id: ObjectId('67f870b8dd3d70fac28bf204'),
+    volume: 170,
+    target: 150
+  }
+]
+
+Question 1 : ចង់បាន volume > target 
+
+>> db.sales.find({$expr:{$gt:["$volume","$target"]}})
+
+[
+  {
+    _id: ObjectId('67f870b8dd3d70fac28bf202'),
+    volume: 120,
+    target: 100
+  },
+  {
+    _id: ObjectId('67f870b8dd3d70fac28bf204'),
+    volume: 170,
+    target: 150
+  }
+]
+
+Question 2: ចង់បាន volume < target 
+
+>> db.sales.find({$expr:{$lt:["$volume","$target"]}})
+
+[
+  {
+    _id: ObjectId('67f870b8dd3d70fac28bf203'),
+    volume: 150,
+    target: 200
+  }
+]
+
+Question 3: ចង់បាន volume > target យើងតម្លៃរបស់វានឹង ត្រូវតែធំជាង 20
+
+
+newDB> db.sales.find()
+[
+  {
+    _id: ObjectId('67f870b8dd3d70fac28bf202'),
+    volume: 120,
+    target: 100
+  },
+  {
+    _id: ObjectId('67f870b8dd3d70fac28bf203'),
+    volume: 150,
+    target: 200
+  },
+  {
+    _id: ObjectId('67f870b8dd3d70fac28bf204'),
+    volume: 170,
+    target: 150
+  },
+  {
+    _id: ObjectId('67f875bbdd3d70fac28bf205'),
+    volume: 200,
+    target: 100
+  },
+  {
+    _id: ObjectId('67f875bbdd3d70fac28bf206'),
+    volume: 160,
+    target: 200
+  },
+  {
+    _id: ObjectId('67f875bbdd3d70fac28bf207'),
+    volume: 270,
+    target: 150
+  }
+]
+
+>> db.sales.find({$expr:{$gt:[{$subtract:["$volume","$target"]},50]}})
+
+[
+  {
+    _id: ObjectId('67f875bbdd3d70fac28bf205'),
+    volume: 200,
+    target: 100
+  },
+  {
+    _id: ObjectId('67f875bbdd3d70fac28bf207'),
+    volume: 270,
+    target: 150
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
