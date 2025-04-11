@@ -4,9 +4,21 @@ MongoDB : GE Command
 
 >> use studentDB
 
+1.1 Show collection :
+
+>> show collections
+
 2. Check DB 
 
 >> db.student.insertOne({name:"Vibol",age:34})
+
+----------------------------------------
+
+2.2 Assign const to replace : db prefix 
+
+const myCollection = db.collectionName;
+
+------------------------------------------
 
 3. Create DB 
 
@@ -77,7 +89,7 @@ Note In transaction : rollback : meaning :
 - rollback mean do from first condition 
 
 
-
+--------------------------------------
 
 
 

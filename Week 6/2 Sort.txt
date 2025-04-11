@@ -1,0 +1,54 @@
+1- Sort 
+
+>> db.movies.find().sort({"rating.average":-1})
+
+: -1 from Small to Big 
+
+- it called ascending 
+
+>> db.movies.find().sort({"rating.average":1})
+
+: 1 from Big to Small 
+- it called descending 
+
+
+2. with Multiple field 
+
+- want to search with rating from Small to Big and runtime: from Small to Big 
+
+>> db.movies.find().sort({"rating.average":-1,runtime:1})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

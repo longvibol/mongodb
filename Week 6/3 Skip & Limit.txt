@@ -1,0 +1,146 @@
+*** Skip : Pagination 
+
+Example :  
+
+page 1 : 1-10
+page 2 : 11-21
+
+>> db.movies.find().skip(10)
+
+ចឹងវានឹងចេញ មកលេខ _id = 11 
+
+==>
+
+
+[
+  {
+    _id: ObjectId('67f5fbcedd4904de07b2b4c8'),
+    id: 11,
+    url: 'http://www.tvmaze.com/shows/11/gotham',
+    name: 'Gotham',
+    type: 'Scripted',
+    language: 'English',
+    genres: [ 'Drama', 'Action', 'Crime' ],
+    status: 'Running',
+    runtime: 60,
+    premiered: '2014-09-22',
+    officialSite: 'http://www.fox.com/gotham',
+    schedule: { time: '20:00', days: [ 'Thursday' ] },
+    rating: { average: 7.8 },
+    weight: 99,
+    network: {
+      id: 4,
+      name: 'FOX',
+      country: {
+        name: 'United States',
+        code: 'US',
+        timezone: 'America/New_York'
+      }
+
+
+---------------------------------
+
+*** Limit :
+
+We want the _id start from 11 and show only 2 documents
+
+>> db.movies.find().skip(10).limit(2)
+
+[
+  {
+    _id: ObjectId('67f5fbcedd4904de07b2b4c8'),
+    id: 11,
+    url: 'http://www.tvmaze.com/shows/11/gotham',
+    name: 'Gotham',
+    type: 'Scripted',
+    language: 'English',
+    genres: [ 'Drama', 'Action', 'Crime' ],
+    status: 'Running',
+    runtime: 60,
+    premiered: '2014-09-22',
+    officialSite: 'http://www.fox.com/gotham',
+    schedule: { time: '20:00', days: [ 'Thursday' ] },
+    rating: { average: 7.8 },
+    weight: 99,
+    network: {
+      id: 4,
+      name: 'FOX',
+      country: {
+        name: 'United States',
+        code: 'US',
+        timezone: 'America/New_York'
+      }
+    },
+    webChannel: null,
+    externals: { tvrage: 38049, thetvdb: 274431, imdb: 'tt3749900' },
+    image: {
+      medium: 'http://static.tvmaze.com/uploads/images/medium_portrait/166/416219.jpg',
+      original: 'http://static.tvmaze.com/uploads/images/original_untouched/166/416219.jpg'
+    },
+    summary: "<p>The good. The evil. The beginning.</p><p>Everyone knows the name Commissioner Gordon. He is one of the crime world's greatest foes, a man whose reputation is synonymous with law and order. But what is known of Gordon's story and his rise from rookie detective to Police Commissioner? What did it take to navigate the multiple layers of corruption that secretly ruled Gotham City, the spawning ground of the world's most iconic villains? And what circumstances created them – the larger-than-life personas who would become Catwoman, The Penguin, The Riddler, Two-Face and The Joker?</p><p><b>Gotham </b>is an origin story of the great DC Comics Super-Villains and vigilantes, revealing an entirely new chapter that has never been told. It follows one cop's rise through a dangerously corrupt city teetering between good and evil, and chronicles the birth of one of the most popular super heroes of our time.</p>",
+    updated: 1536171775,
+    _links: {
+      self: { href: 'http://api.tvmaze.com/shows/11' },
+      previousepisode: { href: 'http://api.tvmaze.com/episodes/1422374' },
+      nextepisode: { href: 'http://api.tvmaze.com/episodes/1473788' }
+    }
+  },
+  {
+    _id: ObjectId('67f5fbcedd4904de07b2b4c9'),
+    id: 12,
+    url: 'http://www.tvmaze.com/shows/12/lost-girl',
+    name: 'Lost Girl',
+    type: 'Scripted',
+    language: 'English',
+    genres: [ 'Drama', 'Fantasy', 'Horror' ],
+    status: 'Ended',
+    runtime: 60,
+    premiered: '2010-09-12',
+    officialSite: 'http://www.showcase.ca/lostgirl',
+    schedule: { time: '22:00', days: [ 'Sunday' ] },
+    rating: { average: 8 },
+    weight: 91,
+    network: {
+      id: 6,
+      name: 'Showcase',
+      country: { name: 'Canada', code: 'CA', timezone: 'America/Halifax' }
+    },
+    webChannel: null,
+    externals: { tvrage: 26401, thetvdb: 182061, imdb: 'tt1429449' },
+    image: {
+      medium: 'http://static.tvmaze.com/uploads/images/medium_portrait/0/137.jpg',
+      original: 'http://static.tvmaze.com/uploads/images/original_untouched/0/137.jpg'
+    },
+    summary: '<p><b>Lost Girl</b> follows supernatural seductress Bo, a Succubus who feeds on the sexual energy of humans. Growing up with human parents, Bo had no reason to believe she was anything other than the girl next door — until she drained her boyfriend to death in their first sexual encounter. Now she has hit the road alone and afraid. <br> She discovers she is one of the Fae, creatures of legend and folklore, who pass as humans while feeding off them secretly and in different ways, as they have for millennia. Relieved yet horrified to find out that she is not alone, Bo decides to take the middle path between the humans and the Fae while embarking on a personal mission to unlock the secrets of her origin.</p><p>With the help of her human sidekick, Kenzi, and Dyson, a sexy police detective, Bo takes on a challenge every week helping a Fae or human client who comes to her to solve a mystery, or to right a wrong.</p>',
+    updated: 1534079929,
+    _links: {
+      self: { href: 'http://api.tvmaze.com/shows/12' },
+      previousepisode: { href: 'http://api.tvmaze.com/episodes/316120' }
+    }
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

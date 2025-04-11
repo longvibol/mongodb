@@ -1,0 +1,447 @@
+** Projection : How to view the data 
+
+1: display 
+0: No Display 
+
+>> db.movies.find({},{name:1,_id:0})
+
+==>
+[
+  { name: 'Under the Dome' },
+  { name: 'Person of Interest' },
+  { name: 'Bitten' },
+  { name: 'Arrow' },
+  { name: 'True Detective' },
+  { name: 'The 100' },
+  { name: 'Homeland' },
+  { name: 'Glee' },
+  { name: 'Revenge' },
+  { name: 'Grimm' },
+  { name: 'Gotham' },
+  { name: 'Lost Girl' },
+  { name: 'The Flash' },
+  { name: 'Continuum' },
+  { name: 'Constantine' },
+  { name: 'Penny Dreadful' },
+  { name: 'The Amazing Race' },
+  { name: 'Supernatural' },
+  { name: 'The Strain' },
+  { name: 'The Last Ship' }
+]
+
+
+2. display multiple field 
+
+>> db.movies.find({},{name:1,genres:1,_id:0})
+
+==> newDB> db.movies.find({},{name:1,genres:1,_id:0}).limit(5)
+
+[
+  {
+    name: 'Under the Dome',
+    genres: [ 'Drama', 'Science-Fiction', 'Thriller' ]
+  },
+  {
+    name: 'Person of Interest',
+    genres: [ 'Drama', 'Action', 'Crime' ]
+  },
+  { name: 'Bitten', genres: [ 'Drama', 'Horror', 'Romance' ] },
+  { name: 'Arrow', genres: [ 'Drama', 'Action', 'Science-Fiction' ] },
+  { name: 'True Detective', genres: [ 'Drama', 'Crime', 'Thriller' ] }
+]
+
+---------------------------------------------------------------------------------------------
+
+*** Projection with Array *** 
+
++ Result Set: គឺជាលទ្ធផលដែលយើងបានទាញចេញពី Qurey របស់យើង : 
+
+newDB> db.movies.find({genres:"Drama"},{_id:0,genres:1})
+[
+  { genres: [ 'Drama', 'Science-Fiction', 'Thriller' ] },
+  { genres: [ 'Drama', 'Action', 'Crime' ] },
+  { genres: [ 'Drama', 'Horror', 'Romance' ] },
+  { genres: [ 'Drama', 'Action', 'Science-Fiction' ] },
+  { genres: [ 'Drama', 'Crime', 'Thriller' ] },
+  { genres: [ 'Drama', 'Thriller', 'Espionage' ] },
+  { genres: [ 'Drama', 'Music', 'Romance' ] },
+  { genres: [ 'Drama', 'Thriller', 'Mystery' ] },
+  { genres: [ 'Drama', 'Crime', 'Supernatural' ] },
+  { genres: [ 'Drama', 'Action', 'Crime' ] },
+  { genres: [ 'Drama', 'Fantasy', 'Horror' ] },
+  { genres: [ 'Drama', 'Action', 'Science-Fiction' ] },
+  { genres: [ 'Drama', 'Crime', 'Science-Fiction' ] },
+  { genres: [ 'Drama', 'Action', 'Horror' ] },
+  { genres: [ 'Drama', 'Horror', 'Thriller' ] },
+  { genres: [ 'Drama', 'Action', 'Supernatural' ] },
+  { genres: [ 'Drama', 'Horror', 'Thriller' ] },
+  { genres: [ 'Drama', 'Action', 'Thriller' ] },
+  { genres: [ 'Drama', 'Romance', 'Supernatural' ] },
+  { genres: [ 'Drama', 'Action', 'Crime' ] }
+]
+
+>> db.movies.find({genres:"Drama"},{_id:0,genres:1}).count()
+
+==> 153
+
+---------------------------------------------------------------------------
+
+==> ចង់បានប្រភេទ genres ដែលមានប្រភេទរឿងជា Drama ទាំងអស់ 
+
+Exa: 
+
+>> newDB> db.movies.find({genres:["Drama"]},{_id:0,genres:1}).count()
+
+==> 8 យើងបានតែ 8 document ទេ តែវាមិនត្រឹមត្រូវ នឹង Data Set យើងចង់បាន 
+មានន័យថា អោយតាមាន Drama យកមកទាំងអស់
+
+--------------------------------------------------------------------------------------
+
+>> db.movies.find({genres:"Drama"},{"genres.$":1,_id:0})
+[
+  { genres: [ 'Drama' ] }, { genres: [ 'Drama' ] },
+  { genres: [ 'Drama' ] }, { genres: [ 'Drama' ] },
+  { genres: [ 'Drama' ] }, { genres: [ 'Drama' ] },
+  { genres: [ 'Drama' ] }, { genres: [ 'Drama' ] },
+  { genres: [ 'Drama' ] }, { genres: [ 'Drama' ] },
+  { genres: [ 'Drama' ] }, { genres: [ 'Drama' ] },
+  { genres: [ 'Drama' ] }, { genres: [ 'Drama' ] },
+  { genres: [ 'Drama' ] }, { genres: [ 'Drama' ] },
+  { genres: [ 'Drama' ] }, { genres: [ 'Drama' ] },
+  { genres: [ 'Drama' ] }, { genres: [ 'Drama' ] }
+]
+
+
+>> db.movies.find({genres:"Drama"},{"genres.$":1,_id:0}).count()
+
+==> 153
+
+WE use : "genres.$":1
+
+------------------------------------------------------------------------------------
+
+3. ចង់បានប្រភេទរឿង Drama and Horror 
+
+Example 1 : 
+
+>> db.movies.find({genres:["Drama","Horror"]},{genres:1}).count()
+
+==> 2
+
+what is the correct :
+
+Example 2 :
+
+>> db.movies.find({genres:{$all:["Drama","Horror"]}},{genres:1,_id:0})
+[
+  { genres: [ 'Drama', 'Horror', 'Romance' ] },
+  { genres: [ 'Drama', 'Fantasy', 'Horror' ] },
+  { genres: [ 'Drama', 'Action', 'Horror' ] },
+  { genres: [ 'Drama', 'Horror', 'Thriller' ] },
+  { genres: [ 'Drama', 'Horror', 'Thriller' ] },
+  { genres: [ 'Drama', 'Action', 'Anime', 'Horror' ] },
+  { genres: [ 'Drama', 'Horror', 'Thriller' ] },
+  { genres: [ 'Drama', 'Horror', 'Thriller' ] },
+  { genres: [ 'Drama', 'Action', 'Horror' ] },
+  { genres: [ 'Drama', 'Horror', 'Romance' ] },
+  { genres: [ 'Drama', 'Fantasy', 'Horror' ] },
+  { genres: [ 'Drama', 'Crime', 'Horror' ] },
+  { genres: [ 'Drama', 'Horror', 'Thriller' ] },
+  { genres: [ 'Drama', 'Horror' ] },
+  { genres: [ 'Drama', 'Horror', 'Romance' ] },
+  { genres: [ 'Drama', 'Horror' ] },
+  { genres: [ 'Drama', 'Horror', 'Supernatural' ] }
+]
+
+We use $all = not is 
+
+------------------------------------------ If we want to specific only want to Show: the Horror movie 
+==> we put .$ 
+
+
+>> db.movies.find({genres:{$all:["Drama","Horror"]}},{"genres.$":1,_id:0})
+[
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] },
+  { genres: [ 'Horror' ] }
+]
+
+ហេតុផល គឺវាចាប់យក "Horror" មកធ្វើជាអាញ៉ាត់
+
+4. យើងចង់បានតែ ប្រភេទ "Drama" ហើយប្រទេភ រឿង ដែលត្រូវបង្ហាញគឺ Horror 
+
+- យើងចាំចេះវិញ 
+
+Note:
+
+db.movies.find({1},{2}) 
+
+1- is the filter 
+2- is projection : where we want to show or view 
+
+>> db.movies.find({genres:"Drama"},{"genres":{$elemMatch:{$eq:"Horror"}}})
+[
+  { _id: ObjectId('67f5fbcedd4904de07b2b4be') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4bf') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c0'), genres: [ 'Horror' ] },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c1') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c2') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c4') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c5') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c6') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c7') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c8') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c9'), genres: [ 'Horror' ] },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4ca') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4cb') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4cc'), genres: [ 'Horror' ] },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4cd'), genres: [ 'Horror' ] },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4cf') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4d0'), genres: [ 'Horror' ] },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4d1') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4d2') },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4d4') }
+]
+
+- ចឹងមានន័យថា បង្ហាញតែ ប្រភេទ Horror ទេ សម្រាប់លក្ខន័ណ ក៏វាចាប់យក Drama ដែល 
+
+or we can filter by another way : with runtime =  60
+
+
+>> db.movies.find({runtime:60},{"genres":{$elemMatch:{$eq:"Horror"}},runtime:1})
+[
+  { _id: ObjectId('67f5fbcedd4904de07b2b4be'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4bf'), runtime: 60 },
+  {
+    _id: ObjectId('67f5fbcedd4904de07b2b4c0'),
+    runtime: 60,
+    genres: [ 'Horror' ]
+  },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c1'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c2'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c3'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c4'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c5'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c6'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c7'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4c8'), runtime: 60 },
+  {
+    _id: ObjectId('67f5fbcedd4904de07b2b4c9'),
+    runtime: 60,
+    genres: [ 'Horror' ]
+  },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4ca'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4cb'), runtime: 60 },
+  {
+    _id: ObjectId('67f5fbcedd4904de07b2b4cc'),
+    runtime: 60,
+    genres: [ 'Horror' ]
+  },
+  {
+    _id: ObjectId('67f5fbcedd4904de07b2b4cd'),
+    runtime: 60,
+    genres: [ 'Horror' ]
+  },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4ce'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4cf'), runtime: 60 },
+  {
+    _id: ObjectId('67f5fbcedd4904de07b2b4d0'),
+    runtime: 60,
+    genres: [ 'Horror' ]
+  },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4d1'), runtime: 60 }
+]
+
+-------------------------------------------------
+
+5. find with rating = 9
+
+>> db.movies.find({"rating.average":{$gte:9}},{"genres":{$elemMatch:{$eq:"Horror"}},runtime:1})
+[
+  { _id: ObjectId('67f5fbcedd4904de07b2b4bf'), runtime: 60 },
+  {
+    _id: ObjectId('67f5fbcedd4904de07b2b4d7'),
+    runtime: 25,
+    genres: [ 'Horror' ]
+  },
+  { _id: ObjectId('67f5fbcedd4904de07b2b4dc'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b50d'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b52f'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b55a'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b55f'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b568'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b569'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b581'), runtime: 60 },
+  { _id: ObjectId('67f5fbcedd4904de07b2b58d'), runtime: 30 }
+]
+
+>> db.movies.find({"rating.average":{$gte:9}},{"rating.average":1,"genres":{$elemMatch:{$eq:"Horror"}},runtime:1})
+
+
+=======================================================
+
+6. $slice
+
+Sample :
+
+{
+    _id: ObjectId('67f5fbcedd4904de07b2b4ce'),
+    name: 'The Amazing Race',
+    genres: [ 'Action', 'Adventure', 'Family' ]
+  },
+
+ចង់បង្ហាញតែ ពីរ រឿងទេ 
+
+>>  db.movies.find({},{"name":1,"genres":{$slice:2}}) 
+
+==> 
+
+
+{
+    _id: ObjectId('67f5fbcedd4904de07b2b4d1'),
+    name: 'The Last Ship',
+    genres: [ 'Drama', 'Action' ]
+  }
+
+
+6. Skip 1 take 2 element : 
+
+>> newDB> db.movies.find({_id: ObjectId('67f5fbcedd4904de07b2b4d1')},{"genres":1})
+[
+  {
+    _id: ObjectId('67f5fbcedd4904de07b2b4d1'),
+    genres: [ 'Drama', 'Action', 'Thriller' ]
+  }
+]
+
+
+>> newDB> db.movies.find({_id: ObjectId('67f5fbcedd4904de07b2b4d1')},{"name":1,"genres":{$slice:[1,2]}})
+
+==> 
+[
+  {
+    _id: ObjectId('67f5fbcedd4904de07b2b4d1'),
+    name: 'The Last Ship',
+    genres: [ 'Action', 'Thriller' ]
+  }
+]
+
+----------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

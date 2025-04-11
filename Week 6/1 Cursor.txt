@@ -1,0 +1,83 @@
+- Cursor It is like pagination : it will return and get the data from what we limit 
+- Normal it will return 20 data 
+
+- If we want it to return one by one we can use : next() method 
+
+Solution We can use const :
+
+1. Find next() element 
+
+>> const movieData = db.movies.find()
+
+>> moviesData.next()
+
+2. Find existing element 
+
+>> movieData.hasNext()
+
+==> true 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
