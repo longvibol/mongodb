@@ -1,0 +1,329 @@
+Sample DB:
+
+[
+    {
+    "name": "Piseth",
+    "hobbies":[
+        {"title": "Sports","fre":3},
+        {"title": "Cooking","fre":6}
+    ],
+    "phone":131782734
+    },
+    {
+    "name": "Dara",
+    "hobbies":[
+        {"title": "Cooking","fre":5},
+        {"title": "Cars","fre":2}
+    ],
+    "phone":"012177972"
+    },
+    {
+    "name": "Thida",
+    "hobbies":[
+        {"title": "Sports","fre":2},
+        {"title": "Yoga","fre":3}
+    ],
+    "phone":"80811987291",
+    "age": null
+    },
+    {
+    "name": "Linda",
+    "hobbies":["Sports","Cooking","Hiking"]        
+    }
+]
+
+---------------------------------------------------------
+
+>> show collections
+>> db.users.find([
+    {
+    "name": "Piseth",
+    "hobbies":[
+        {"title": "Sports","fre":3},
+        {"title": "Cooking","fre":6}
+    ],
+    "phone":131782734
+    },
+    {
+    "name": "Dara",
+    "hobbies":[
+        {"title": "Cooking","fre":5},
+        {"title": "Cars","fre":2}
+    ],
+    "phone":"012177972"
+    },
+    {
+    "name": "Thida",
+    "hobbies":[
+        {"title": "Sports","fre":2},
+        {"title": "Yoga","fre":3}
+    ],
+    "phone":"80811987291",
+    "age": null
+    },
+    {
+    "name": "Linda",
+    "hobbies":["Sports","Cooking","Hiking"]        
+    }
+])
+
+
+------------------------------------------------------------------------------
+
+Result : 
+
+school> db.users.find()
+[
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fb9'),
+    name: 'Piseth',
+    hobbies: [ { title: 'Sports', fre: 3 }, { title: 'Cooking', fre: 6 } ],
+    phone: 131782734
+  },
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fba'),
+    name: 'Dara',
+    hobbies: [ { title: 'Cooking', fre: 5 }, { title: 'Cars', fre: 2 } ],
+    phone: '012177972'
+  },
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fbb'),
+    name: 'Thida',
+    hobbies: [ { title: 'Sports', fre: 2 }, { title: 'Yoga', fre: 3 } ],
+    phone: '80811987291',
+    age: null
+  },
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fbc'),
+    name: 'Linda',
+    hobbies: [ 'Sports', 'Cooking', 'Hiking' ]
+  }
+]
+
+
+===============================================================================
+
+1. find users that have hobbies: "Sports" and fre : "3"
+
+Note: if we do not use $elemMatch it will get all the users that have "Sports" and fre = "3"
+
+Ex: 
+
+>> db.users.find({"hobbies.title":"Sports","hobbies.fre":{$gte:3}})
+
+==> school> db.users.find({"hobbies.title":"Sports","hobbies.fre":{$gte:3}})
+[
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fb9'),
+    name: 'Piseth',
+    hobbies: [ { title: 'Sports', fre: 3 }, { title: 'Cooking', fre: 6 } ],
+    phone: 131782734
+  },
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fbb'),
+    name: 'Thida',
+    hobbies: [ { title: 'Sports', fre: 2 }, { title: 'Yoga', fre: 3 } ],
+    phone: '80811987291',
+    age: null
+  }
+]
+
+
+===> Solution We use 
+
+>>
+school> db.users.find({hobbies:{$elemMatch:{title:"Sports",fre:{$gte:3}}}})
+[
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fb9'),
+    name: 'Piseth',
+    hobbies: [ { title: 'Sports', fre: 3 }, { title: 'Cooking', fre: 6 } ],
+    phone: 131782734
+  }
+]
+
+======================================================================== 
+
+Update Array Element :
+
+1. update fre from Piseth to 10
+
+>> db.users.updateMany({hobbies:{$elemMatch:{title:"Sports",fre:{$gte:3}}}},{$set:{"hobbies.$.fre":10}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+-- Key work $set and need to have $ where we want to specific the update Array element 
+
+{$set:{"hobbies.$.fre":10}
+
+
+2. Update (Add one more field to the Array Hobbies :
+
+>> db.users.updateMany({hobbies:{$elemMatch:{title:"Sports",fre:{$gte:3}}}},{$set:{"hobbies.$.isSport":true}})
+
+==>
+
+school> db.users.find()
+[
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fb9'),
+    name: 'Piseth',
+    hobbies: [
+      { title: 'Sports', fre: 10, isSport: true },
+      { title: 'Cooking', fre: 6 }
+    ],
+    phone: 131782734
+  },
+
+Note .$. វាចាប់យក field ណាដែលមានឈ្មោះនឹង ដើម្បីធ្វើការ Update បើវាមិនមាន វា បន្ថែម filed មួយទៀត​
+
+
+3. Update two field 
+
+school> db.users.updateMany({hobbies:{$elemMatch:{title:"Sports",fre:{$gte:2}}}},{$set:{"hobbies.$.isUpdate":true}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 2,
+  modifiedCount: 2,
+  upsertedCount: 0
+}
+school> db.users.find()
+[
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fb9'),
+    name: 'Piseth',
+    hobbies: [
+      { title: 'Sports', fre: 10, isSport: true, isUpdate: true },
+      { title: 'Cooking', fre: 6 }
+    ],
+    phone: 131782734
+  },
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fba'),
+    name: 'Dara',
+    hobbies: [ { title: 'Cooking', fre: 5 }, { title: 'Cars', fre: 2 } ],
+    phone: '012177972'
+  },
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fbb'),
+    name: 'Thida',
+    hobbies: [
+      { title: 'Sports', fre: 2, isUpdate: true },
+      { title: 'Yoga', fre: 3 }
+    ],
+    phone: '80811987291',
+    age: null
+  },
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fbc'),
+    name: 'Linda',
+    hobbies: [ 'Sports', 'Cooking', 'Hiking' ]
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

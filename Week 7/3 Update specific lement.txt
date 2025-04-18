@@ -1,0 +1,98 @@
+*Update Array element to the specific field *
+
+Video 30
+
+Example:
+
+{
+    _id: ObjectId('67ff69fff1bae5c217228fb9'),
+    name: 'Piseth',
+    hobbies: [
+      {
+        title: 'Sports',
+        fre: 10,
+        isSport: true,
+        isUpdate: true,
+        goodFre: 'Yes'
+      },
+      { title: 'Cooking', fre: 6, goodFre: 'Yes' }
+    ],
+    phone: 131782734
+  },
+
+-----------------------------------------------------------
+
+{
+    _id: ObjectId('67ff69fff1bae5c217228fba'),
+    name: 'Dara',
+    hobbies: [
+      { title: 'Cooking', fre: 5, goodFre: 'Yes' },
+      { title: 'Cars', fre: 2, goodFre: 'Yes' }
+    ],
+    phone: '012177972'
+  },
+
+-----------------------------------------------------------
+
+
+==> 
+
+- Take a look at document Piseth : have in Array hobbies have fre: 10 and in file title : fre: 6
+- Take a look at document Dara : have in Array hobbies have fre: 5 and in file title : fre: 2
+
+
+>> db.users.updateMany({"hobbies.fre":{$gte:3}},{$set:{"hobbies.$[e].isNewField":true}},{arrayFilters:[{"e.fre":{$gt:2}}]})
+
+Result:
+
+==> school> db.users.find()
+[
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fb9'),
+    name: 'Piseth',
+    hobbies: [
+      {
+        title: 'Sports',
+        fre: 10,
+        isSport: true,
+        isUpdate: true,
+        goodFre: 'Yes',
+        isNewField: true
+      },
+      { title: 'Cooking', fre: 6, goodFre: 'Yes', isNewField: true }
+    ],
+    phone: 131782734
+  },
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fba'),
+    name: 'Dara',
+    hobbies: [
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Cars', fre: 2, goodFre: 'Yes' }
+    ],
+    phone: '012177972'
+  },
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fbb'),
+    name: 'Thida',
+    hobbies: [
+      { title: 'Sports', fre: 2, isUpdate: true, goodFre: 'Yes' },
+      { title: 'Yoga', fre: 3, goodFre: 'Yes', isNewField: true }
+    ],
+    phone: '80811987291',
+    age: null
+  },
+  {
+    _id: ObjectId('67ff69fff1bae5c217228fbc'),
+    name: 'Linda',
+    hobbies: [ 'Sports', 'Cooking', 'Hiking' ]
+  }
+]
+
+
+
+
+
+
+
+
