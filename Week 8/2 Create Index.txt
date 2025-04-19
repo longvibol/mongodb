@@ -1,0 +1,163 @@
+V-35 and 36 
+
+*** Create Index ***
+
+>> db.contacts.createIndex({"dob.age":1})
+
+1 : from small to big 
+
+Example we want to search by using our indext dob.age 
+
+>> db.contacts.explain("executionStats").find({"dob.age":{$gte:60}})
+
+==> 
+
+executionStats: {
+    executionSuccess: true,
+    nReturned: 1328,
+    executionTimeMillis: 8,
+    totalKeysExamined: 1328,
+    totalDocsExamined: 1328,
+    executionStages: {
+      isCached: false,
+      stage: 'FETCH',
+      nReturned: 1328,
+      executionTimeMillisEstimate: 4,
+      works: 1329,
+      advanced: 1328,
+      needTime: 0,
+      needYield: 0,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      docsExamined: 1328,
+      alreadyHasObj: 0,
+      inputStage: {
+        stage: 'IXSCAN',
+        nReturned: 1328,
+        executionTimeMillisEstimate: 0,
+        works: 1329,
+        advanced: 1328,
+        needTime: 0,
+        needYield: 0,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        keyPattern: { 'dob.age': 1 },
+        indexName: 'dob.age_1',
+        isMultiKey: false,
+        multiKeyPaths: { 'dob.age': [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: { 'dob.age': [ '[60, inf.0]' ] },
+        keysExamined: 1328,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0
+      }
+    }
+  },
+
+Result : 
+
+- stage: 'IXSCAN'= Index Scan 
+- docsExamined: 1328 វាពិនិត្យមើលតែ 1328 ទេ
+- executionTimeMillisEstimate: 4 ប្រើពេលអស់
+
+=====================================================================
+
+- Index គឺវាបង្កើតកន្លែងទីតាំងនៅក្នុង Memory ចឹងវាមានទីតាំងរួចរាល់ហើយ 
+Example : create index by dob.age show it will be :
+
+1
+2
+3
+4
+5
+
+
+
+60
+70
+80
+
+
+គឺវាបង្កើតជាលំដាប់តូចជាងមុន 
+
+
+ចឹងសម្រាប់ពីយើង find age > 60 វានឹងទៅមើលតែ ពី ៦០ឡើងទៅ 
+
+======================================================================================
+
+
+Index Behind the scenes 
+
+Ex: use age for an index 
+
+(29, "Address in memory / collection e1")
+(30, "Address in memory / collection e2")
+(31, "Address in memory / collection e3")
+(32, "Address in memory / collection e4")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

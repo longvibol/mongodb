@@ -1,0 +1,63 @@
+1- Find how many index we have :
+
+>> school> db.contacts.getIndexes()
+
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { 'dob.age': 1 }, name: 'dob.age_1' }
+]
+
+2- Create Index 
+
+>> db.contacts.createIndex({"dob":1})
+
+==> dob_1
+
+3- Drop Index 
+
+>> school> db.contacts.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { 'dob.age': 1 }, name: 'dob.age_1' },
+  { v: 2, key: { dob: 1 }, name: 'dob_1' }
+]
+
+school> db.contacts.dropIndex({"dob":1})
+{ nIndexesWas: 3, ok: 1 }
+
+==> school> db.contacts.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { 'dob.age': 1 }, name: 'dob.age_1' }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

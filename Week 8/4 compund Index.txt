@@ -1,0 +1,296 @@
+V-38 
+
+What is compound index : we use more than 2 index combine together 
+
+Ex: age , gender 
+
+30,male
+31,female 
+31, male 
+32,male 
+
+- វារាប់ដោយគិតចាប់ពី age មុន ហើយ បន្ទាប់មកបានវារាប់ យក gender 
+
+
+Create Compund Index 
+
+
+>> db.contacts.createIndex({"dob.age":1,gender:1})
+
+==> dob.age_1_gender_1
+
+>> school> db.contacts.getIndexes()
+
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { 'dob.age': 1 }, name: 'dob.age_1' },
+  {
+    v: 2,
+    key: { 'dob.age': 1, gender: 1 },
+    name: 'dob.age_1_gender_1'
+  }
+]
+
+===============================================
+
+Ex:
+
+>> db.contacts.explain("executionStats").find({"dob.age":{$gte:60},gender:"female"})
+
+==> 
+
+ executionStats: {
+    executionSuccess: true,
+    nReturned: 666,
+    executionTimeMillis: 2,
+    totalKeysExamined: 680,
+    totalDocsExamined: 666,
+    executionStages: {
+      isCached: false,
+      stage: 'FETCH',
+      nReturned: 666,
+      executionTimeMillisEstimate: 0,
+      works: 681,
+      advanced: 666,
+      needTime: 14,
+      needYield: 0,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      docsExamined: 666,
+      alreadyHasObj: 0,
+      inputStage: {
+        stage: 'IXSCAN',
+        nReturned: 666,
+        executionTimeMillisEstimate: 0,
+        works: 681,
+        advanced: 666,
+        needTime: 14,
+        needYield: 0,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        keyPattern: { 'dob.age': 1, gender: 1 },
+        indexName: 'dob.age_1_gender_1',
+        isMultiKey: false,
+        multiKeyPaths: { 'dob.age': [], gender: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: {
+          'dob.age': [ '[60, inf.0]' ],
+          gender: [ '["female", "female"]' ]
+        },
+        keysExamined: 680,
+        seeks: 15,
+        dupsTested: 0,
+        dupsDropped: 0
+      }
+    }
+
+Result it use our create index :
+
+- indexName: 'dob.age_1_gender_1',
+
+Ex:2 if we put gender first 
+
+>> db.contacts.explain("executionStats").find({gender:"female","dob.age":{$gte:60}})
+
+==> 
+
+indexFilterSet: false,
+    queryHash: '810A4CE9',
+    planCacheKey: 'A4B762E9',
+    optimizationTimeMillis: 0,
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    prunedSimilarIndexes: false,
+    winningPlan: {
+      isCached: false,
+      stage: 'FETCH',
+      inputStage: {
+        stage: 'IXSCAN',
+        keyPattern: { 'dob.age': 1, gender: 1 },
+        indexName: 'dob.age_1_gender_1',
+        isMultiKey: false,
+        multiKeyPaths: { 'dob.age': [], gender: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: {
+          'dob.age': [ '[60, inf.0]' ],
+          gender: [ '["female", "female"]' ]
+        }
+      }
+
+- indexName: 'dob.age_1_gender_1' ចឹងវាប្រើ our create index we create 
+
+
+Noted: 
+
+If we check in the index : 
+
+>> school> db.contacts.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { 'dob.age': 1 }, name: 'dob.age_1' },
+  {
+    v: 2,
+    key: { 'dob.age': 1, gender: 1 },
+    name: 'dob.age_1_gender_1'
+  }
+]
+
+==> We drop one { 'dob.age': 1 }
+
+>> school> db.contacts.dropIndex({ 'dob.age': 1})
+{ nIndexesWas: 3, ok: 1 }
+school> db.contacts.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  {
+    v: 2,
+    key: { 'dob.age': 1, gender: 1 },
+    name: 'dob.age_1_gender_1'
+  }
+]
+
+==> យើងចង់ដឹងថាបើយើងមិនមាន index gender តើវាប្រើ collection scan or index scan 
+
+>> db.contacts.explain("executionStats").find({"dob.age":{$gte:60}})
+
+==> 
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'school.contacts',
+    parsedQuery: { 'dob.age': { '$gte': 60 } },
+    indexFilterSet: false,
+    queryHash: 'D2CA29D9',
+    planCacheKey: '92EB3E57',
+    optimizationTimeMillis: 0,
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    prunedSimilarIndexes: false,
+    winningPlan: {
+      isCached: false,
+      stage: 'FETCH',
+      inputStage: {
+        stage: 'IXSCAN',
+        keyPattern: { 'dob.age': 1, gender: 1 },
+        indexName: 'dob.age_1_gender_1',
+        isMultiKey: false,
+        multiKeyPaths: { 'dob.age': [], gender: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: {
+          'dob.age': [ '[60, inf.0]' ],
+          gender: [ '[MinKey, MaxKey]' ]
+        }
+      }
+    },
+
+==>
+
+stage: 'IXSCAN',
+        keyPattern: { 'dob.age': 1, gender: 1 },
+        indexName: 'dob.age_1_gender_1',
+
+==> It still use our 'dob.age_1_gender_1'
+
+ផ្ទុយទៅវិញ បើយើង find by gender it will not be apply because our compound Index it start will age -> gender 
+
+>> db.contacts.explain("executionStats").find({gender:"male"})
+
+==> {
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'school.contacts',
+    parsedQuery: { gender: { '$eq': 'male' } },
+    indexFilterSet: false,
+    queryHash: '2FC37AE0',
+    planCacheKey: '354E5737',
+    optimizationTimeMillis: 0,
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    prunedSimilarIndexes: false,
+    winningPlan: {
+      isCached: false,
+      stage: 'COLLSCAN',
+      filter: { gender: { '$eq': 'male' } },
+      direction: 'forward'
+    },
+    rejectedPlans: []
+  },
+
+Result : 
+
+- stage: 'COLLSCAN' = collection Scan 
+
+==================================================================
+
+Remark :
+
+3 compound index :
+
+Age, gender, email 
+
+If we search by :
+
+- Age : okay 
+- Age and Gender : okay
+- Age, gender, email : okay 
+
+But if we search from right to left it will use collection Sacn 
+
+Gender, email 
+email 
+
+==> វាយក អាដើមគេយកធ្វើជាគោល 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

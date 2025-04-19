@@ -1,0 +1,52 @@
+V-37 
+
+- ពេលដែលយើងចង់រកអ្វីមួយដែលចេញពី ចំនួនមួយតូចចេញពីចំនួនមួយ ធំ គឺយើងប្រើ Index ល្អ 
+
+Ex: find 100 from 1M record we use index it will be faster 
+
+>> school> db.contacts.find({"dob.age":{$gte:70}}).count()
+==> 397
+
+>> school> db.contacts.find({"dob.age":{$gte:20}}).count()
+==> 5000
+
+--------------------------------------------------------------------------------------------
+
+>> school> db.contacts.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { 'dob.age': 1 }, name: 'dob.age_1' }
+]
+
+Compare : 
+
+1- If we use index find age > 20 it take 6 S 
+2- If we use index find age > 70 it take 4 S 
+
+Result : 
+
+age > 20 ពេលវាធ្វើការ Scan វាទៅពិនិត្យមើល Index យើងម្តងសិន ហើយបានវា​ទៅ filter​ ម្តងទៀត ចឹង បើវាមានចំនួនទៅនឹង ចំនួនវាស្រាប់យើងមិនចាំបាច់ប្រើ Index នោះទេ
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
