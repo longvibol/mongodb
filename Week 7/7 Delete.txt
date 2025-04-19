@@ -1,0 +1,140 @@
+V-34
+
+*** Delete One and Many *** 
+
+>> db.users.deleteOne({name:"Linda"})
+
+school> db.users.find()
+[
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb5'),
+    name: 'Piseth',
+    hobbies: [
+      { title: 'Sports', fre: 3, goodFre: 'Yes', isNewField: true },
+
+school> db.users.find()
+[
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb5'),
+    name: 'Piseth',
+    hobbies: [
+      { title: 'Sports', fre: 3, goodFre: 'Yes', isNewField: true },
+      { title: 'Cooking', fre: 6, goodFre: 'Yes', isNewField: true }
+    ],
+    phone: 131782734
+  },
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb6'),
+    name: 'Dara',
+    hobbies: [
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Dring', fre: 5 },
+      { title: 'Shopping', fre: 1 },
+      { title: 'Song', fre: 7 },
+      { title: 'Swin', fre: 2 }
+    ],
+    phone: '012177972',
+    hobbines: [ { title: 'Swimming', fre: 1 }, { title: 'Swimming', fre: 1 } ]
+  },
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb7'),
+    name: 'Thida',
+    hobbies: [
+      { title: 'Sports', fre: 2, goodFre: 'Yes' },
+      { title: 'Yoga', fre: 3, goodFre: 'Yes', isNewField: true }
+    ],
+    phone: '80811987291',
+    age: null
+  }
+]
+
+==> We can not see the Linda 
+
+=============================================================
+
+Delete Many 
+
+Sample : 
+
+school> db.users.find()
+[
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb5'),
+    name: 'Piseth',
+    hobbies: [
+      { title: 'Sports', fre: 3, goodFre: 'Yes', isNewField: true },
+      { title: 'Cooking', fre: 6, goodFre: 'Yes', isNewField: true }
+    ],
+    phone: 131782734
+  },
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb6'),
+    name: 'Dara',
+    hobbies: [
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Dring', fre: 5 },
+      { title: 'Shopping', fre: 1 },
+      { title: 'Song', fre: 7 },
+      { title: 'Swin', fre: 2 }
+    ],
+    phone: '012177972',
+    hobbines: [ { title: 'Swimming', fre: 1 }, { title: 'Swimming', fre: 1 } ]
+  },
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb7'),
+    name: 'Thida',
+    hobbies: [
+      { title: 'Sports', fre: 2, goodFre: 'Yes' },
+      { title: 'Yoga', fre: 3, goodFre: 'Yes', isNewField: true }
+    ],
+    phone: '80811987291',
+    age: null
+  }
+]
+
+-- Want to deleted title : Sport ==> Show it will delete : Piseth, Thida 
+
+>> db.users.deleteMany({"hobbies.title":"Sports"})
+
+==> Result : 
+
+school> db.users.find()
+[
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb6'),
+    name: 'Dara',
+    hobbies: [
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Dring', fre: 5 },
+      { title: 'Shopping', fre: 1 },
+      { title: 'Song', fre: 7 },
+      { title: 'Swin', fre: 2 }
+    ],
+    phone: '012177972',
+    hobbines: [ { title: 'Swimming', fre: 1 }, { title: 'Swimming', fre: 1 } ]
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,23 @@
+
+V-33:
+
+
+
+- addToSet : no duplicate add to element 
+
+
+ >> db.users.updateOne({name:"Dara"},{$addToSet:{hobbies:{title:"Swin",fre:2}}})
+
+==> hobbies: [
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Dring', fre: 5 },
+      { title: 'Shopping', fre: 1 },
+      { title: 'Song', fre: 7 },
+      { title: 'Swin', fre: 2 }
+    ],
+
+We can see : { title: 'Swin', fre: 2 }
+
+Noted We we use addToSet We can not duplicate to The field 
+
+But if we use $push : It can add it 

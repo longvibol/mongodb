@@ -1,0 +1,173 @@
+V-32
+
+Sample DB:
+
+school> db.users.find({"name":"Dara"})
+[
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb6'),
+    name: 'Dara',
+    hobbies: [
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Cars', fre: 2, goodFre: 'Yes' }
+    ],
+    phone: '012177972'
+  }
+]
+
+==> We want update element {title:"Swimming",fre:1}
+
+>> db.users.updateOne({"name":"Dara"},{$push:{hobbies:{title:"Swimming",fre:1}}})
+
+Explain :  We want to add the element to Array mean to can use Method from Array : Push 
+
+- {$push:{hobbies:{title:"Swimming",fre:1}}}
+: hobbies is the Array and inside have element title 
+
+Result after add : 
+
+school> db.users.find({"name":"Dara"})
+[
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb6'),
+    name: 'Dara',
+    hobbies: [
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Cars', fre: 2, goodFre: 'Yes' },
+      { title: 'Swimming', fre: 1 }
+    ],
+
+
+======================================================
+
+Push many element to Array : use $each:[{e1},{e2}] 
+
+>>  db.users.updateOne({"name":"Dara"},{$push:{hobbies:{$each:[{title:"Song",fre:7},{title:"Shopping",fre:1}]}}})
+
+==>
+school> db.users.find({"name":"Dara"})
+[
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb6'),
+    name: 'Dara',
+    hobbies: [
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Cars', fre: 2, goodFre: 'Yes' },
+      { title: 'Swimming', fre: 1 },
+      { title: 'Song', fre: 7 },
+      { title: 'Shopping', fre: 1 }
+    ],
+
+=======================================================
+
+*** Add New Element Then Sort It Out *** 
+
+We want to add new element to Array then sort it 
+
+$sort
+
+1 : from small to Big
+-1 : from big to small 
+
+
+>> db.users.updateOne({"name":"Dara"},{$push:{hobbies:{$each:[{title:"Skiy",fre:2},{title:"Dring",fre:5}],$sort:{title:1}}}})
+
+
+==> 
+
+school> db.users.find({"name":"Dara"})
+[
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb6'),
+    name: 'Dara',
+    hobbies: [
+      { title: 'Cars', fre: 2, goodFre: 'Yes' },
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Dring', fre: 5 },
+      { title: 'Shopping', fre: 1 },
+      { title: 'Skiy', fre: 2 },
+      { title: 'Song', fre: 7 },
+      { title: 'Swimming', fre: 1 }
+    ],
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

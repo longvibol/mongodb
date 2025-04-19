@@ -1,0 +1,104 @@
+Remove : Pull
+
+>> school> db.users.find({name:"Dara"})
+[
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb6'),
+    name: 'Dara',
+    hobbies: [
+      { title: 'Cars', fre: 2, goodFre: 'Yes' },
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Dring', fre: 5 },
+      { title: 'Shopping', fre: 1 },
+      { title: 'Skiy', fre: 2 },
+      { title: 'Song', fre: 7 },
+      { title: 'Swimming', fre: 1 }
+    ],
+    phone: '012177972',
+    hobbines: [ { title: 'Swimming', fre: 1 }, { title: 'Swimming', fre: 1 } ]
+  }
+]
+
+--- We want to remove : element : { title: 'Skiy', fre: 2 } from hobbies:
+
+>> db.users.updateOne({name:"Dara"},{$pull:{hobbies:{title:"Skiy"}}})
+
+==>
+
+school> db.users.find({name:"Dara"})
+[
+  {
+    _id: ObjectId('6800c436e4a73b0617228fb6'),
+    name: 'Dara',
+    hobbies: [
+      { title: 'Cars', fre: 2, goodFre: 'Yes' },
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Dring', fre: 5 },
+      { title: 'Shopping', fre: 1 },
+      { title: 'Song', fre: 7 },
+      { title: 'Swimming', fre: 1 }
+    ],
+
+
+==========================================================
+
+** Remove last element or first element from Array **  Pop 
+
+-1 : Frist Element 
+1  : Last Elment 
+
+
+Example :
+
+hobbies: [
+      { title: 'Cars', fre: 2, goodFre: 'Yes' },
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Dring', fre: 5 },
+      { title: 'Shopping', fre: 1 },
+      { title: 'Song', fre: 7 },
+      { title: 'Swimming', fre: 1 }
+    ],
+
++ Remove Last element : { title: 'Swimming', fre: 1 }
+
+
+>> db.users.updateOne({name:"Dara"},{$pop:{hobbies:1}})
+
+==> 
+
+hobbies: [
+      { title: 'Cars', fre: 2, goodFre: 'Yes' },
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Dring', fre: 5 },
+      { title: 'Shopping', fre: 1 },
+      { title: 'Song', fre: 7 }
+    ],
+
+
++ Remove first element : { title: 'Cars', fre: 2, goodFre: 'Yes' }
+
+>> db.users.updateOne({name:"Dara"},{$pop:{hobbies:-1}})
+
+ hobbies: [
+      { title: 'Cooking', fre: 5, goodFre: 'Yes', isNewField: true },
+      { title: 'Dring', fre: 5 },
+      { title: 'Shopping', fre: 1 },
+      { title: 'Song', fre: 7 }
+    ],
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
