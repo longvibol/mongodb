@@ -1,0 +1,59 @@
+V-39
+
+1. Default Index
+
+Ex:
+
+>> db.animals.insertOne({name:"Cat"})
+
+>> db.animals.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+
+==> { v: 2, key: { _id: 1 }, name: '_id_' } it is called default index : _id: 1
+
+---------------------------------------------------------------------------------------
+
+
+2. unique index 
+
+We want to create index that have no duplicate 
+
+>> school> db.animals.find()
+
+[ { _id: ObjectId('680469f0f3eeaf5d8b228fb5'), name: 'Cat' } ]
+school> db.animals.createIndex({name:1},{unique:true})
+name_1
+
+
+>> school> db.animals.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { name: 1 }, name: 'name_1', unique: true }
+]
+
+So if we add the duplicate value it will show error :
+
+Ex: add name:"Cat"
+
+>> school> db.animals.insertOne({name:"Cat"})
+
+==>
+
+MongoServerError: E11000 duplicate key error collection: school.animals index: name_1 dup key: { name: "Cat" }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

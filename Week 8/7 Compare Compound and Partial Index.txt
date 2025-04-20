@@ -1,0 +1,58 @@
+Ex: index age and gender 
+
+How does it store 
+
+* Compare Compound Index : dob.age:1,gender
+
+it store index of age and gender Male and Female 
+
+10,male
+11,male
+12,female
+12,male
+
+
+
+* Partial Index : dob.age:1,partialFilterExpression:{gender:"male"}
+
+វារក្សាទុកតែ gender = male ទាំងអស់
+
+10
+11,
+12
+13
+
+=========================================== What it is effect 
+
+ពេលយើងបង្កើត index ចឹងគេយើងបានបង្កើត ទីតាំង memonry អោយវាមួយទៀត ចឹងពេលដែលយើងធ្វើការ Insert 
+វាត្រូវធ្វើការ ពីរដង់
+
+ឧៈ Insert int collection AB
+
+1. Insert to AB 
+2. Insert to index registry មួយទៀត 
+
+when we use index we make our query fast but when it have effect to Insert operation  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

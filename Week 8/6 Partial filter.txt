@@ -1,0 +1,150 @@
+V-39
+
+
+Parial index : មានន័យថាចាំពេលវាចូលលក្ខខណ្ឌ របស់យើងចាំអោយវាយក index នឹងមក Find 
+
+Ex: Create index with dob.age , gender: 
+
+>>school> db.contacts.createIndex({"dob.age":1},{partialFilterExpression:{gender:"male"}})
+
+==>dob.age_1
+
+>> school> db.contacts.getIndexes()
+
+==>
+
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  {
+    v: 2,
+    key: { 'dob.age': 1 },
+    name: 'dob.age_1',
+    partialFilterExpression: { gender: 'male' }
+  }
+]
+
+- Example when search:
+
+>> db.contacts.explain("executionStats").find({"dob.age":{$gte:60}})
+
+==> 
+
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'school.contacts',
+    parsedQuery: { 'dob.age': { '$gte': 60 } },
+    indexFilterSet: false,
+    queryHash: 'D2CA29D9',
+    planCacheKey: 'E7223C86',
+    optimizationTimeMillis: 0,
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    prunedSimilarIndexes: false,
+    winningPlan: {
+      isCached: false,
+      stage: 'COLLSCAN',
+      filter: { 'dob.age': { '$gte': 60 } },
+      direction: 'forward'
+    },
+    rejectedPlans: []
+  },
+
+- វាប្រើ collection scan ដដែលព្រោះមិនទាន់ចូលលក្ខខណរបស់យើង 
+
+>> school> db.contacts.explain("executionStats").find({"dob.age":{$gte:60},gender:"male"})
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'school.contacts',
+    parsedQuery: {
+      '$and': [ { gender: { '$eq': 'male' } }, { 'dob.age': { '$gte': 60 } } ]
+    },
+    indexFilterSet: false,
+    queryHash: '810A4CE9',
+    planCacheKey: '7777FEEB',
+    optimizationTimeMillis: 0,
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    prunedSimilarIndexes: false,
+    winningPlan: {
+      isCached: false,
+      stage: 'FETCH',
+      inputStage: {
+        stage: 'IXSCAN',
+        keyPattern: { 'dob.age': 1 },
+        indexName: 'dob.age_1',
+        isMultiKey: false,
+        multiKeyPaths: { 'dob.age': [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: true,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: { 'dob.age': [ '[60, inf.0]' ] }
+      }
+    },
+
+===> It use our Index scan : stage: 'IXSCAN'
+
+
+conslution : when we need to use partial index :
+
+ពេលដែលយើងដឹងថា user គាត់ប្រើប្រាស់លើការ Search នឹងច្រើន​
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
