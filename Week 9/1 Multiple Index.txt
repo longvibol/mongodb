@@ -1,0 +1,294 @@
+V-40
+
+Why we have Multi Key index in MongoDb 
+
+Because it have Array inside the field that why we have multiple index
+
++ Multi Key Index:
+
+Name: dara, age : 32
+Name: Thida, age : 25
+
+We use Age as index:
+
++ Single index : 
+
+25
+32
+
++ Hobbies:["Sport","Music","Cooking"]
+
+
+==> There for if we use hobbies to create index it will pull all the element from the array to create index :
+
+Cooking,
+Music,
+Sport 
+
+វាធ្វើការ store from small to big 
+
+
+Summary :
+
+Operation Write : a little bit slow but when 
+
+- Read it will be fast 
+
+
+Ex: 
+
+>> db.userContacts.insertOne({name:"Pisth",hobbies:["Sport","Music"],address:[{street:"7 Makara"},{street:"Tuol Kok"}]})
+
+- Create hobbies to the index 
+
+>> db.userContacts.createIndex({hobbies:1})
+
+>> [
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { hobbies: 1 }, name: 'hobbies_1' }
+]
+
+If we find from the hobbies : 
+
+>> db.userContacts.explain("executionStats").find({"hobbies":"Sport"})
+
+==> 
+
+},
+        indexName: 'hobbies_1',
+        isMultiKey: true,
+        multiKeyPaths: {
+          hobbies: [
+            'hobbies'
+          ]
+        },
+        isUnique: 
+
+==> We can see isMultiKey: true : it mean that from our search we use Multikey 
+
+
+
+=============================================================================================
+
+Note:
+inside the Array and it have property So if we create from Array it will not create property to the index: 
+
+Ex:
+
+address: [
+    {
+      street: '7 Makara'
+    },
+    {
+      street: 'Tuol Kok'
+    }
+  ]
+}
+
+>> db.userContacts.createIndex({address:1})
+
+==> 
+
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { hobbies: 1 }, name: 'hobbies_1' },
+  { v: 2, key: { address: 1 }, name: 'address_1' }
+]
+
+-----------------------------------------------------------
+
+If we find the address : 
+
+>> db.userContacts.explain("executionStats").find({"address.street":"7 Makara"})
+
+==> 
+
+executionStats: {
+    executionSuccess: true,
+    nReturned: 1,
+    executionTimeMillis: 0,
+    totalKeysExamined: 0,
+    totalDocsExamined: 1,
+    executionStages: {
+      isCached: false,
+      stage: 'COLLSCAN',
+      filter: {
+        'address.street': {
+          '$eq': '7 Makara'
+        }
+      },
+
+
+==> It used Collection Scan 
+
+Another Option :
+
+>> db.userContacts.createIndex({"address.street":1})
+
+==>
+
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { hobbies: 1 }, name: 'hobbies_1' },
+  { v: 2, key: { address: 1 }, name: 'address_1' },
+  { v: 2, key: { 'address.street': 1 }, name: 'address.street_1' }
+]
+
+So we can use : 
+
+>> [
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { hobbies: 1 }, name: 'hobbies_1' },
+  { v: 2, key: { address: 1 }, name: 'address_1' },
+  { v: 2, key: { 'address.street': 1 }, name: 'address.street_1' }
+]
+
+
+==> It will use Index Scan But it will be slow performene because it is Multi Multi index (វាធ្វើ Index ពីរតង់)  it will be slow when it Write to DB 
+
+
+====================================================================================
+
+If we want to use multiple index to scan from Array Address 
+
+>> db.userContacts.explain("executionStats").find({"address":{street:"7 Makara"}})
+
+It will use Index Scan 
+
+Conclution :
+
+Multi Key index: doesn't pull property of element to be index. 
+
+
+
+====================================================================================
+
+
+Compund Multi Index 
+
+>> db.userContacts.createIndex({name:1,address:1})
+
+We can do it : 
+
+==> { v: 2, key: { name: 1, address: 1 }, name: 'name_1_address_1' }
+
+But if we create from Array and Array to create Multi Index We can not do it :
+
+>> db.userContacts.createIndex({hobbies:1,address:1})
+
+Error :
+
+==> MongoServerError[CannotIndexParallelArrays]: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
