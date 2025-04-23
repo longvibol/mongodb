@@ -1,0 +1,270 @@
+V-41 Text Index :
+
+Text Index:
+
+Is special type of multi key index
+
+"The seven-year old boy comes from Cambodia."
+
+==> 
+
+The 
+seven
+year
+old 
+boy
+comes
+from
+Cambodia
+
+-----------------------------------------------------------------------------------------------------------
+
+- take from each text to register on Index registry 
+
+Sample : DB
+
+>> db.products.insertMany([{title:"A Book", description:"This book is made in Cambodia"},{title:"New Car",description:"The new car from Cambodia"}])
+
+
+>> {
+  _id: ObjectId('6805b01351ec80d671391fb2'),
+  title: 'A Book',
+  description: 'This book is made in Cambodia'
+}
+
+{
+  _id: ObjectId('6805b01351ec80d671391fb3'),
+  title: 'New Car',
+  description: 'The new car from Cambodia'
+}
+
+================================= Create Index on the description: 
+
+>> db.products.createIndex({description:"text"})
+
+>> db.products.getIndexes()
+
+==>
+
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  {
+    v: 2,
+    key: { _fts: 'text', _ftsx: 1 },
+    name: 'description_text',
+    weights: { description: 1 },
+    default_language: 'english',
+    language_override: 'language',
+    textIndexVersion: 3
+  }
+]
+
+==> When we want to search on the text inside the text index 
+
+>> db.products.find({$text:{$search:"Cambodia"}})
+
+==> school> db.products.find({$text:{$search:"Cambodia"}})
+[
+  {
+    _id: ObjectId('6805b01351ec80d671391fb3'),
+    title: 'New Car',
+    description: 'The new car from Cambodia'
+  },
+  {
+    _id: ObjectId('6805b01351ec80d671391fb2'),
+    title: 'A Book',
+    description: 'This book is made in Cambodia'
+  }
+]
+
+So it will return all the description that have Cambodia 
+
+2. Search from combine text : "from Cambodia"
+
+if we use : >> db.products.find({$text:{$search:"from Cambodia"}})
+
+==> 
+
+[
+  {
+    _id: ObjectId('6805b01351ec80d671391fb3'),
+    title: 'New Car',
+    description: 'The new car from Cambodia'
+  },
+  {
+    _id: ObjectId('6805b01351ec80d671391fb2'),
+    title: 'A Book',
+    description: 'This book is made in Cambodia'
+  }
+]
+
+It still get two documents: 
+
+>> school> db.products.find({$text:{$search:"\"from Cambodia\""}})
+
+[
+  {
+    _id: ObjectId('6805b01351ec80d671391fb3'),
+    title: 'New Car',
+    description: 'The new car from Cambodia'
+  }
+]
+
+
+We use special key expression : \"from Cambodia\" to combine these two to one key word. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

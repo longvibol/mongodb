@@ -1,0 +1,172 @@
+V-43
+
+Link : https://www.mongodb.com/docs/manual/reference/geojson/
+
+- Point
+- Polygon
+- MultiPoint
+- MultiLineString
+
+1. Add location in Mongodb (Eaon Mall location)
+
+>>  db.places.insertOne({name:"Aeon Mall Sen Sok",location:{type:"Point",coordinates:[104.8834623,11.6021669]}})
+
+==> db.places.find()
+[
+  {
+    _id: ObjectId('68084f8f19fd6367f08bf202'),
+    name: 'Aeon Mall Sen Sok',
+    location: { type: 'Point', coordinates: [ 104.8834623, 11.6021669 ] }
+  }
+]
+
+--------------------------------------------
+
+2. Find Location in MongoDB 
+
+We search near by location not the exactly location what we add 
+
+>>school> db.places.find({location:{$near:{$geometry:{type:"Point",coordinates:[104.8855484, 11.6016388]}}}})
+Uncaught:
+
+MongoServerError[NoQueryExecutionPlans]: error processing query: ns=school.placesTree: GEONEAR  field=location maxdist=1.79769e+308 isNearSphere=0
+Sort: {}
+Proj: {}
+
+planner returned error :: caused by :: unable to find index for $geoNear query
+
+==> This Geopatial need the index to find so we need to create index first:
+
+>> db.places.createIndex({location:"2dsphere"})
+
+We create index from location and it type : "2dsphere"
+
+>> db.places.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  {
+    v: 2,
+    key: { location: '2dsphere' },
+    name: 'location_2dsphere',
+    '2dsphereIndexVersion': 3
+  }
+]
+
+We run our query again :
+
+>> db.places.find({location:{$near:{$geometry:{type:"Point",coordinates:[104.8855484, 11.6016388]}}}})
+
+==> school> db.places.find({location:{$near:{$geometry:{type:"Point",coordinates:[104.8855484, 11.6016388]}}}})
+[
+  {
+    _id: ObjectId('68084f8f19fd6367f08bf202'),
+    name: 'Aeon Mall Sen Sok',
+    location: { type: 'Point', coordinates: [ 104.8834623, 11.6021669 ] }
+  }
+]
+
+** វានឹងចេញទីតាំងអោយយើង នៅទីតាំងណាដែល ជិតជាងវាចេញមុន វាធ្វើការ Sort អោយយើងបើមានទីតាំងនៅជិតនឹងច្រើន ** 
+
+=============================================================================================================
+
+3. Find Near by location and have Max distance from our currently locate 
+
+We test by the google map from Petal KH to Aeon Sen Sok 289m 
+
+>> db.places.find({location:{$near:{$geometry:{type:"Point",coordinates:[104.8855484, 11.6016388]},$maxDistance:240}}})
+
+==>[
+  {
+    _id: ObjectId('68084f8f19fd6367f08bf202'),
+    name: 'Aeon Mall Sen Sok',
+    location: { type: 'Point', coordinates: [ 104.8834623, 11.6021669 ] }
+  }
+]
+
+- Key word : $maxDistance:240
+
+- In case it does not have near by location it will not show anything ! 
+
+Explanation:
+
+- $geometry: Defines the reference point for the query.
+- $minDistance: Ensures that only documents at least 500 meters away are included.
+- $maxDistance: (Optional) Limits the results to documents within 5000 meters.
+
+This query will return all stores that are between 500 meters and 5000 meters from the specified point. Let me know if you'd like further clarification or additional examples!
+
+
+គេប្រើ ផ្គួប ៖ ចន្លោះចំងាយពីរ 500 to 5000 meters អោយវាបង្ហាញ
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

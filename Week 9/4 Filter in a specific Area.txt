@@ -1,0 +1,29 @@
+V-44
+
+1. Sarah Guest House : 104.8845917, 11.600104
+2. Seorae Korean Charcoal BBQ : 104.8845917, 11.600104
+
+
+>> db.places.insertOne({name:"Sarah Guest House",location:{type:"Point",coordinates:[104.8845917, 11.600104]}})
+
+>> db.places.insertOne({name:"Seorae Korean Charcoal BBQ",location:{type:"Point",coordinates:[104.8845917, 11.600104]}})
+
+==>  school> db.places.find()
+[
+  {
+    _id: ObjectId('680869e03f4faf7d448bf202'),
+    name: 'Aeon Mall Sen Sok',
+    location: { type: 'Point', coordinates: [ 104.8834623, 11.6021669 ] }
+  },
+  {
+    _id: ObjectId('68086a2c3f4faf7d448bf203'),
+    name: 'Sarah Guest House',
+    location: { type: 'Point', coordinates: [ 104.8845917, 11.600104 ] }
+  },
+  {
+    _id: ObjectId('68086a323f4faf7d448bf204'),
+    name: 'Seorae Korean Charcoal BBQ',
+    location: { type: 'Point', coordinates: [ 104.8845917, 11.600104 ] }
+  }
+]
+
