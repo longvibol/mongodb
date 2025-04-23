@@ -1,0 +1,228 @@
+V - 47 
+
+Sample : 
+
+school> db.contacts.findOne()
+{
+  _id: ObjectId('68088ea11241cbdd0c33b965'),
+  gender: 'male',
+  name: { title: 'mr', first: 'victor', last: 'pedersen' },
+  location: {
+    street: '2156 stenbjergvej',
+    city: 'billum',
+    state: 'nordjylland',
+    postcode: 56649,
+    coordinates: { latitude: '-29.8113', longitude: '-31.0208' },
+    timezone: {
+      offset: '+5:30',
+      description: 'Bombay, Calcutta, Madras, New Delhi'
+    }
+  },
+  email: 'victor.pedersen@example.com',
+  login: {
+    uuid: 'fbb3c298-2cea-4415-84d1-74233525c325',
+    username: 'smallbutterfly536',
+    password: 'down',
+    salt: 'iW5QrgwW',
+    md5: '3cc8b8a4d69321a408cd46174e163594',
+    sha1: '681c0353b34fae08422686eea190e1c09472fc1f',
+    sha256: 'eb5251e929c56dfd19fc597123ed6ec2d0130a2c3c1bf8fc9c2ff8f29830a3b7'
+  },
+  dob: { date: '1959-02-19T23:56:23Z', age: 59 },
+  registered: { date: '2004-07-07T22:37:39Z', age: 14 },
+  phone: '23138213',
+  cell: '30393606',
+  id: { name: 'CPR', value: '506102-2208' },
+  picture: {
+    large: 'https://randomuser.me/api/portraits/men/23.jpg',
+    medium: 'https://randomuser.me/api/portraits/med/men/23.jpg',
+    thumbnail: 'https://randomuser.me/api/portraits/thumb/men/23.jpg'
+  },
+  nat: 'DK'
+}
+
+---------------------------------------------------------------------------------------- 
+
+We want to get only the coordinates: { latitude: '-29.8113', longitude: '-31.0208' },
+
+>> db.contacts.aggregate([
+    {
+        $project: {_id:0,gender: 1,name:1,email:1,
+            location:{type:"Point",coordinates:[
+                "$location.coordinates.longitude",
+                "$location.coordinates.latitude"
+            ]
+        }
+
+        }
+
+    },
+    {
+        $project: {
+            _id:0,gender: 1,
+            fullname:{$concat:[
+                {$toUpper:{$substrCP:["$name.first",0,1]}},
+                {$substrCP:["$name.first",1,{$subtract:[{$strLenCP:"$name.first"},1]}]},
+                " ",
+                {$toUpper:{$substrCP:["$name.last",0,1]}},
+                {$substrCP:["$name.last",1,{$subtract:[{$strLenCP:"$name.last"},1]}]},
+                ]},location:1,
+        },
+        
+    },
+    
+    {$limit: 5},
+])
+
+==> 
+
+[
+  {
+    gender: 'male',
+    location: { type: 'Point', coordinates: [ '-31.0208', '-29.8113' ] },
+    fullname: 'Victor Pedersen'
+  },
+  {
+    gender: 'male',
+    location: { type: 'Point', coordinates: [ '-154.6037', '-29.6721' ] },
+    fullname: 'Carl Jacobs'
+  },
+  {
+    gender: 'male',
+    location: { type: 'Point', coordinates: [ '-70.2264', '76.4507' ] },
+    fullname: 'Zachary Lo'
+  },
+  {
+    gender: 'male',
+    location: { type: 'Point', coordinates: [ '168.9462', '-22.5329' ] },
+    fullname: 'Harvey Chambers'
+  },
+school>
+    gender: 'male',
+    location: { type: 'Point', coordinates: [ '-54.1364', '-86.1268' ] },
+    fullname: 'Gideon Van drongelen'
+  }
+]
+
+Note : coordinates: [ '-70.2264', '76.4507' ]  == this is string but we want to see it in number 
+
+=======================================================================
+
+** So need to convert it to number. From String To number ** 
+
+Link : 
+
+https://www.mongodb.com/docs/manual/reference/operator/aggregation/convert/
+
+- mandatory = Need can not miss 
+
+>> db.contacts.aggregate([
+    {
+        $project: {_id:0,gender: 1,name:1,email:1,
+            location:{type:"Point",coordinates:[
+                {$convert: {input:"$location.coordinates.longitude", to:"double"}},
+                {$convert: {input:"$location.coordinates.latitude", to:"double"}}
+            ]
+        }
+
+        }
+
+    },
+    {
+        $project: {
+            _id:0,gender: 1,
+            fullname:{$concat:[
+                {$toUpper:{$substrCP:["$name.first",0,1]}},
+                {$substrCP:["$name.first",1,{$subtract:[{$strLenCP:"$name.first"},1]}]},
+                " ",
+                {$toUpper:{$substrCP:["$name.last",0,1]}},
+                {$substrCP:["$name.last",1,{$subtract:[{$strLenCP:"$name.last"},1]}]},
+                ]},location:1,
+        },
+        
+    },
+    
+    {$limit: 5},
+])
+
+
+==> 
+
+[
+  {
+    gender: 'male',
+    location: { type: 'Point', coordinates: [ -31.0208, -29.8113 ] },
+    fullname: 'Victor Pedersen'
+  },
+  {
+    gender: 'male',
+    location: { type: 'Point', coordinates: [ -154.6037, -29.6721 ] },
+    fullname: 'Carl Jacobs'
+  },
+  {
+    gender: 'male',
+    location: { type: 'Point', coordinates: [ -70.2264, 76.4507 ] },
+    fullname: 'Zachary Lo'
+  },
+  {
+    gender: 'male',
+    location: { type: 'Point', coordinates: [ 168.9462, -22.5329 ] },
+    fullname: 'Harvey Chambers'
+  },
+  {
+    gender: 'male',
+    location: { type: 'Point', coordinates: [ -54.1364, -86.1268 ] },
+    fullname: 'Gideon Van drongelen'
+  }
+
+
+So we can see the result is number now : coordinates: [ -54.1364, -86.1268 ]
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

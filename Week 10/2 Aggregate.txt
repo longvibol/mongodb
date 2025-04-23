@@ -1,0 +1,328 @@
+V-46 Projection
+
+
+>> school> db.contacts.findOne()
+{
+  _id: ObjectId('68088ea11241cbdd0c33b965'),
+  gender: 'male',
+  name: { title: 'mr', first: 'victor', last: 'pedersen' },
+  location: {
+    street: '2156 stenbjergvej',
+    city: 'billum',
+    state: 'nordjylland',
+    postcode: 56649,
+    coordinates: { latitude: '-29.8113', longitude: '-31.0208' },
+    timezone: {
+      offset: '+5:30',
+      description: 'Bombay, Calcutta, Madras, New Delhi'
+    }
+  },
+  email: 'victor.pedersen@example.com',
+  login: {
+    uuid: 'fbb3c298-2cea-4415-84d1-74233525c325',
+    username: 'smallbutterfly536',
+    password: 'down',
+    salt: 'iW5QrgwW',
+    md5: '3cc8b8a4d69321a408cd46174e163594',
+    sha1: '681c0353b34fae08422686eea190e1c09472fc1f',
+    sha256: 'eb5251e929c56dfd19fc597123ed6ec2d0130a2c3c1bf8fc9c2ff8f29830a3b7'
+  },
+  dob: { date: '1959-02-19T23:56:23Z', age: 59 },
+  registered: { date: '2004-07-07T22:37:39Z', age: 14 },
+  phone: '23138213',
+  cell: '30393606',
+  id: { name: 'CPR', value: '506102-2208' },
+  picture: {
+    large: 'https://randomuser.me/api/portraits/men/23.jpg',
+    medium: 'https://randomuser.me/api/portraits/med/men/23.jpg',
+    thumbnail: 'https://randomuser.me/api/portraits/thumb/men/23.jpg'
+  },
+  nat: 'DK'
+}
+
+======================================================================================================
+
+We want to show _id, gender: 'male' and name: { title: 'mr', first: 'victor', last: 'pedersen' },
+
+==> full​name = victor Pedersen
+
+Example how to concat string together 
+
+>> db.contacts.aggregate([
+    {
+        $project: {
+            _id:0,gender: 1,fullname:{$concat:["Hello"," ","Cambodia"]}
+        }
+    }
+])
+
+
+=======================
+
+in our contacts db :
+
+>> db.contacts.aggregate([
+    {
+        $project: {
+            _id:0,gender: 1,fullname:{$concat:["$name.frist"," ","$name.last"]}
+        }
+    }
+])
+
+-- we replace with our field name.first and name.last 
+
+==> 
+
+[
+  { gender: 'male', fullname: null },
+  { gender: 'male', fullname: null },
+  { gender: 'male', fullname: null },
+  { gender: 'male', fullname: null },
+  { gender: 'male', fullname: null },
+  { gender: 'female', fullname: null },
+  { gender: 'female', fullname: null },
+  { gender: 'male', fullname: null },
+  { gender: 'female', fullname: null },
+  { gender: 'female', fullname: null },
+  { gender: 'female', fullname: null },
+  { gender: 'female', fullname: null },
+  { gender: 'male', fullname: null },
+  { gender: 'female', fullname: null },
+  { gender: 'female', fullname: null },
+  { gender: 'female', fullname: null },
+  { gender: 'male', fullname: null },
+  { gender: 'female', fullname: null },
+  { gender: 'female', fullname: null },
+  { gender: 'female', fullname: null }
+]
+
+
+========================= Want to get all the full name with upper cast 
+
+>> db.contacts.aggregate([
+    {
+        $project: {
+            _id:0,gender: 1,fullname:{$concat:[{$toUpper:"$name.first"}," ",{$toUpper:"$name.last"}]}
+        }
+    }
+])
+
+==>
+
+[
+  { gender: 'male', fullname: 'VICTOR PEDERSEN' },
+  { gender: 'male', fullname: 'CARL JACOBS' },
+  { gender: 'male', fullname: 'ZACHARY LO' },
+  { gender: 'male', fullname: 'HARVEY CHAMBERS' },
+  { gender: 'male', fullname: 'GIDEON VAN DRONGELEN' },
+  { gender: 'female', fullname: 'پریا پارسا' },
+  { gender: 'female', fullname: 'MAEVA WILSON' },
+  { gender: 'male', fullname: 'ELIJAH LEWIS' },
+  { gender: 'female', fullname: 'OLAV OEHME' },
+  { gender: 'female', fullname: 'MADELEINE TILL' },
+  { gender: 'female', fullname: 'SHONA KEMPERMAN' },
+  { gender: 'female', fullname: 'LOUISE GRAHAM' },
+  { gender: 'male', fullname: 'ISOLINO VIANA' },
+  { gender: 'female', fullname: 'MESTAN KAPLANGı' },
+  { gender: 'female', fullname: 'KATIE WELCH' },
+  { gender: 'female', fullname: 'SANDRA LORENZO' },
+  { gender: 'male', fullname: 'بنیامین سالاری' },
+  { gender: 'female', fullname: 'ANDREIA ARNAUD' },
+  { gender: 'female', fullname: 'ANAëLLE ADAM' },
+  { gender: 'female', fullname: 'ANNE RUIZ' }
+]
+
+-----------------------------------------------------------------
+
+Ex : 
+
+
+>> db.contacts.aggregate([
+    {
+        $project: {
+            _id:0,gender: 1,
+            fullname:{$concat:[
+                {$toUpper:{$substrCP:["$name.first",0,1]}},
+                {$substrCP:["$name.first",1,{$subtract:[{$strLenCP:"$name.first"},1]}]},
+                " ",
+                {$toUpper:{$substrCP:["$name.last",0,1]}},
+                {$substrCP:["$name.last",1,{$subtract:[{$strLenCP:"$name.last"},1]}]},
+                ]}
+        }
+    }
+])
+
+==> 
+
+[
+  { gender: 'male', fullname: 'Victor Pedersen' },
+  { gender: 'male', fullname: 'Carl Jacobs' },
+  { gender: 'male', fullname: 'Zachary Lo' },
+  { gender: 'male', fullname: 'Harvey Chambers' },
+  { gender: 'male', fullname: 'Gideon Van drongelen' },
+  { gender: 'female', fullname: 'پریا پارسا' },
+  { gender: 'female', fullname: 'Maeva Wilson' },
+  { gender: 'male', fullname: 'Elijah Lewis' },
+  { gender: 'female', fullname: 'Olav Oehme' },
+  { gender: 'female', fullname: 'Madeleine Till' },
+  { gender: 'female', fullname: 'Shona Kemperman' },
+  { gender: 'female', fullname: 'Louise Graham' },
+  { gender: 'male', fullname: 'Isolino Viana' },
+  { gender: 'female', fullname: 'Mestan Kaplangı' },
+  { gender: 'female', fullname: 'Katie Welch' },
+  { gender: 'female', fullname: 'Sandra Lorenzo' },
+  { gender: 'male', fullname: 'بنیامین سالاری' },
+  { gender: 'female', fullname: 'Andreia Arnaud' },
+  { gender: 'female', fullname: 'Anaëlle Adam' },
+  { gender: 'female', fullname: 'Anne Ruiz' }
+]
+
+
+Explain : 'Victor Pedersen'
+
+fullname:{$concat:[
+                {$toUpper:{$substrCP:["$name.first",0,1]}},
+                {$substrCP:["$name.first",1,{$subtract:[{$strLenCP:"$name.first"},1]}]},
+                " ",
+                {$toUpper:{$substrCP:["$name.last",0,1]}},
+                {$substrCP:["$name.last",1,{$subtract:[{$strLenCP:"$name.last"},1]}]},
+                ]}
+
+
+- V =  {$toUpper:{$substrCP:["$name.first",0,1]}},
+- ictor =  {$substrCP:["$name.first",1,{$subtract:[{$strLenCP:"$name.first"},1]}]}, ( take leng -1) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,234 @@
+V-45:
+
+
+Aggregate Framework:
+
+
+- Build pipeline of step ($match -> $sort -> $group ->project-> output(List of documents))
+- That run on the data which receive from collection and give the output in the format we need. 
+
+What is Stage ឆាក់ = every stage receive output from previous stage. 
+
+- Aggregate is the list of document 
+
+Ex: db.contacts.aggregate([{},{},{}])
+
+>> db.contacts.aggregate([ { $match: { gender: "female" } }] )
+
+school> db.contacts.aggregate([ { $match: { gender: "female" } }] )
+[
+  {
+    _id: ObjectId('68088ea11241cbdd0c33b96a'),
+    gender: 'female',
+    name: { title: 'mrs', first: 'پریا', last: 'پارسا' },
+    location: {
+      street: '2889 اجاره دار',
+      city: 'بوشهر',
+      state: 'خراسان جنوبی',
+      postcode: 32528,
+      coordinates: { latitude: '4.6625', longitude: '34.1689' },
+      timezone: {
+        offset: '+3:00',
+        description: 'Baghdad, Riyadh, Moscow, St. Petersburg'
+      }
+    },
+    email: 'پریا.پارسا@example.com',
+    login: {
+      uuid: '75c0d4dd-3a88-42dd-a7ad-5d39b0d8b4b1',
+      username: 'orangesnake137',
+      password: '1031',
+      salt: 'NRy5mtiy',
+      md5: '76aac038463dbbed95cb107811879981',
+      sha1: '7013f5d075efcfc35b1cb18298bd7e81db566af2',
+      sha256: '6a2792cf9c0386679eb2ca357bcae567907bcfad0d400a56d4c3dd55203d8c61'
+    },
+    dob: { date: '1962-01-10T05:26:30Z', age: 56 },
+    registered: { date: '2015-03-20T08:41:37Z', age: 3 },
+    phone: '053-06884781',
+    cell: '0993-557-5092',
+    id: { name: '', value: null },
+    picture: {
+      large: 'https://randomuser.me/api/portraits/women/52.jpg',
+      medium: 'https://randomuser.me/api/portraits/med/women/52.jpg',
+      thumbnail: 'https://randomuser.me/api/portraits/thumb/women/52.jpg'
+    },
+    nat: 'IR'
+  },
+
+
+================================== Example with $match and $group 
+
+>> db.contacts.aggregate([
+    {
+        $match: {gender:"female"}
+    },
+    {
+        $group: {_id:{state:"$location.state"}, count:{$sum:1}}
+    }
+])
+
+
+==> 
+
+[
+  { _id: { state: 'bremen' }, count: 11 },
+  { _id: { state: 'región de murcia' }, count: 9 },
+  { _id: { state: 'yukon' }, count: 16 },
+  { _id: { state: 'overijssel' }, count: 20 },
+  { _id: { state: 'galway city' }, count: 6 },
+  { _id: { state: 'gers' }, count: 2 },
+  { _id: { state: 'زنجان' }, count: 3 },
+  { _id: { state: 'north carolina' }, count: 4 },
+  { _id: { state: 'laois' }, count: 2 },
+  { _id: { state: 'کردستان' }, count: 3 },
+  { _id: { state: 'nordjylland' }, count: 27 },
+  { _id: { state: 'isparta' }, count: 3 },
+  { _id: { state: 'yalova' }, count: 2 },
+  { _id: { state: 'maryland' }, count: 1 },
+  { _id: { state: 'rhode island' }, count: 2 },
+  { _id: { state: 'bern' }, count: 7 },
+  { _id: { state: 'alpes-maritimes' }, count: 1 },
+  { _id: { state: 'خراسان جنوبی' }, count: 5 },
+  { _id: { state: 'nevşehir' }, count: 2 },
+  { _id: { state: 'dún laoghaire–rathdown' }, count: 4 }
+]
+
+========================================================================
+
+We remove the $match = "female"
+
+>> db.contacts.aggregate([
+     {
+        $group: {_id:{state:"$location.state"}, count:{$sum:1}}
+    }
+])
+
+
+=========================================================================
+
+4. Sort data 
+
+>> db.contacts.aggregate([
+    {
+        $match: {gender:"female"}
+    },
+    {
+        $group: {_id:{state:"$location.state"}, count:{$sum:1}}
+    },
+    {
+        $sort: {count:-1}
+    },
+    {
+        $limit: 5
+    }
+])
+
+To be a bitter query we need to verity again : 
+
+Example: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

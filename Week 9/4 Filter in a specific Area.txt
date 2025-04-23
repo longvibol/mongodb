@@ -1,17 +1,11 @@
 V-44
 
+Sample data location : 
+
 1. Sarah Guest House : 104.8845917, 11.600104
 2. Seorae Korean Charcoal BBQ : 104.8845917, 11.600104
 3. Chip Mong Sen Sok Mall : 104.8765552, 11.5919545
 4. Eaon Sen Sok 
-
--------------------------------
-
-4 Locaitons:
-
-const p1 =[104.88271981437777,11.60471328161825]
-const p2 =[104.8893770100348, 11.600760689841154]
-const p3 =[104.88018534546126, 11.598313023981103]
 
 
 >> db.places.insertOne({name:"Sarah Guest House",location:{type:"Point",coordinates:[104.8845917, 11.600104]}})
@@ -22,7 +16,23 @@ const p3 =[104.88018534546126, 11.598313023981103]
 
 >>db.places.insertOne({name:"Aeon Mall Sen Sok",location:{type:"Point",coordinates:[104.8834623,11.6021669]}})
 
-==>  school> db.places.find()
+
+-------------------------------
+
+Sample Polygon Area : 
+
+4 Locaitons:
+
+const p1 =[104.88271981437777,11.60471328161825]
+const p2 =[104.8893770100348, 11.600760689841154]
+const p3 =[104.88018534546126, 11.598313023981103]
+const p4 =[104.88100694327301, 11.605034109205882]
+
+
+We expect to get three area that are inside the Polygon :
+
+>> db.places.find({ location: { $geoWithin: { $geometry: { type: "Polygon", coordinates: [[p1, p2, p3, p4, p1]] } } } })
+
 [
   {
     _id: ObjectId('680869e03f4faf7d448bf202'),
@@ -39,5 +49,29 @@ const p3 =[104.88018534546126, 11.598313023981103]
     name: 'Seorae Korean Charcoal BBQ',
     location: { type: 'Point', coordinates: [ 104.8845917, 11.600104 ] }
   }
-]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
