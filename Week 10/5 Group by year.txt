@@ -1,61 +1,26 @@
-V - 48
-
-Link: https://www.mongodb.com/docs/manual/reference/operator/aggregation/convert/
-
 Syntax:
 
 {
-   $convert:
-      {
-         input: <expression>,
-         to: <type expression> || {
-            type: <type expression>,
-            subtype: <int>
-         },
-         format: <string>,
-         onError: <expression>,
-         onNull: <expression>
-      }
-} 
+ $group:
+   {
+     _id: <expression>, // Group key
+     <field1>: { <accumulator1> : <expression1> },
+     ...
+   }
+ }
 
-------------------------------------------------------------------------------------------------
+Ex: 
 
->> db.contacts.aggregate([
-    {
-        $project: {_id:0,gender: 1,name:1,email:1,
-            birthdate:{$convert: {input:"$dob.date", to:"date"}},
-            location:{type:"Point",coordinates:[
-                {$convert: {input:"$location.coordinates.longitude", to:"double"}},
-                {$convert: {input:"$location.coordinates.latitude", to:"double"}}
-            ]
-        }
+<expression> =  _id:
 
-        }
+<field1> = {year:{$year:"$birthdate"}},
 
-    },
-    {
-        $project: {
-            _id:0,gender: 1,
-            birthdate:1,
-            fullname:{$concat:[
-                {$toUpper:{$substrCP:["$name.first",0,1]}},
-                {$substrCP:["$name.first",1,{$subtract:[{$strLenCP:"$name.first"},1]}]},
-                " ",
-                {$toUpper:{$substrCP:["$name.last",0,1]}},
-                {$substrCP:["$name.last",1,{$subtract:[{$strLenCP:"$name.last"},1]}]},
-                ]},location:1,
-        },
-        
-    },
-    {
-        $limit: 5,
-    }
-])
 
--- Key word : {$convert: {input:"$dob.date", to:"date"}},
-We can use the method to simply this syntax : 
 
->> db.contacts.aggregate([
+======================================Group By Year :
+
+
+>>db.contacts.aggregate([
     {
         $project: {_id:0,gender: 1,name:1,email:1,
             birthdate:{$toDate:"$dob.date"},
@@ -82,33 +47,83 @@ We can use the method to simply this syntax :
         },
         
     },
+   
     {
-        $limit: 5,
+        $group:{
+            _id:{year:{$year:"$birthdate"}},
+            NumberOfPerson:{$sum:1},           
+        }
     }
 ])
 
-== We use :"birthdate:{$toDate:"$dob.date"}," 
+==> 
 
-យើងប្រើវាបានពេលដែលយើងដឹងថាវាមិនមាន null និងមួយទៀតគឺវាមាន handdle error នោះទេ។​
+[
+  { _id: { year: 1995 }, count: 102 },
+  { _id: { year: 1960 }, count: 111 },
+  { _id: { year: 1990 }, count: 103 },
+  { _id: { year: 1972 }, count: 80 },
+  { _id: { year: 1961 }, count: 111 },
+  { _id: { year: 1964 }, count: 86 },
+  { _id: { year: 1997 }, count: 52 },
+  { _id: { year: 1989 }, count: 93 },
+  { _id: { year: 1981 }, count: 100 },
+  { _id: { year: 1973 }, count: 93 },
+  { _id: { year: 1957 }, count: 82 },
+  { _id: { year: 1974 }, count: 96 },
+  { _id: { year: 1958 }, count: 102 },
+  { _id: { year: 1979 }, count: 84 },
+  { _id: { year: 1994 }, count: 101 },
+  { _id: { year: 1978 }, count: 85 },
+  { _id: { year: 1976 }, count: 103 },
+  { _id: { year: 1967 }, count: 106 },
+  { _id: { year: 1963 }, count: 96 },
+  { _id: { year: 1991 }, count: 95 }
+]
 
----------------------------------------------------------------------------------------------------
 
+------------------------------------------------------ Want to group by year and sort the top numPerson	 
 
+we use : {
+        $sort:{numPerson:-1}
+    }
 
+----------------------------------------------------------------------
 
+>> db.contacts.aggregate([
+    {
+        $project: {_id:0,gender: 1,name:1,email:1,
+            birthdate:{$toDate:"$dob.date"},
+            location:{type:"Point",coordinates:[
+                {$convert: {input:"$location.coordinates.longitude", to:"double"}},
+                {$convert: {input:"$location.coordinates.latitude", to:"double"}}
+            ]
+        }
 
+        }
 
+    },
+    {
+        $project: {
+            _id:0,gender: 1,
+            birthdate:1,
+            fullname:{$concat:[
+                {$toUpper:{$substrCP:["$name.first",0,1]}},
+                {$substrCP:["$name.first",1,{$subtract:[{$strLenCP:"$name.first"},1]}]},
+                " ",
+                {$toUpper:{$substrCP:["$name.last",0,1]}},
+                {$substrCP:["$name.last",1,{$subtract:[{$strLenCP:"$name.last"},1]}]},
+                ]},location:1,
+        },
+    },
+    {
+        $group:{_id:{year:{$year:"$birthdate"}},numPerson:{$sum:1}}
+    },
+    {
+        $sort:{numPerson:-1}
+    }
 
-
-
-
-
-
-
-
-
-
-
+])
 
 
 

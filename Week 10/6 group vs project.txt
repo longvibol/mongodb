@@ -1,0 +1,7 @@
+V-49
+
+$group vs $project 
+
+$group: n -> we group multiple documents together (sum, count, average,...)
+
+$project: 1->1 : included / exclude field, transform with a single document
